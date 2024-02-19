@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wager_app/themes/colors.dart';
+import 'package:wager_app/utils/bet_tile.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -10,6 +11,14 @@ class HomePage extends StatefulWidget {
 }
 
 void openSettings() {}
+List betData = [
+  [
+    'UCL Winner',
+    'Daniel says Arsenal will win the chanmpions league and Ethan does not',
+    '200',
+  ],
+  ['Best out of 3', 'Ethab says he will have more than 2', '50'],
+];
 
 class _HomePageState extends State<HomePage> {
   @override
@@ -83,61 +92,18 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(
               height: 30,
             ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-              decoration: BoxDecoration(
-                color: MyAppColors.containerColor,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "UCL Winner",
-                          style: GoogleFonts.workSans(
-                              color: MyAppColors.textColor,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w500),
-                        ),
-                        Text(
-                          "Daniel says Arsenal will win the chanmpions league and Ethan does not",
-                          style: GoogleFonts.workSans(
-                              color: MyAppColors.textColor, fontSize: 16),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 2,
-                        )
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 30,
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        "R",
-                        style: GoogleFonts.workSans(
-                            color: MyAppColors.textColor,
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        "200",
-                        style: GoogleFonts.workSans(
-                            color: MyAppColors.textColor,
-                            fontSize: 17,
-                            fontWeight: FontWeight.w700),
-                      )
-                    ],
-                  ),
-                ],
-              ),
-            ),
+            SizedBox(
+              height: 400,
+              child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: betData.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return BetTile(
+                        betTitle: betData[index][0],
+                        betDescription: betData[index][1],
+                        betAmount: betData[index][2]);
+                  }),
+            )
           ],
         ),
       ),
