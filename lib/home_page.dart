@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:wager_app/pages/make_bet_page.dart';
 import 'package:wager_app/themes/colors.dart';
 import 'package:wager_app/utils/bet_tile.dart';
+import 'package:wager_app/utils/make_bet_container.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -10,7 +12,6 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-void openSettings() {}
 List betData = [
   [
     'UCL Winner',
@@ -21,6 +22,15 @@ List betData = [
 ];
 
 class _HomePageState extends State<HomePage> {
+  void openSettings() {}
+
+  void openNewBetPage() {
+    setState(() {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => MakeBetPage()));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +38,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
-        actions: const [
+        actions: [
           IconButton(
               onPressed: openSettings,
               icon: Icon(
@@ -54,41 +64,7 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(
               height: 30,
             ),
-            Row(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: MyAppColors.containerColor,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: const Icon(
-                    Icons.add,
-                    size: 55,
-                    color: MyAppColors.accentColor,
-                  ),
-                ),
-                const SizedBox(
-                  width: 15,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "New Bet",
-                      style: GoogleFonts.workSans(
-                          color: MyAppColors.textColor,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 16),
-                    ),
-                    Text(
-                      "Pick a topic, make a prediction",
-                      style: GoogleFonts.workSans(
-                          color: MyAppColors.textColor, fontSize: 16),
-                    )
-                  ],
-                ),
-              ],
-            ),
+            MakeBetContainer(onTap: openNewBetPage),
             const SizedBox(
               height: 30,
             ),
