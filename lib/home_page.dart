@@ -5,6 +5,8 @@ import 'package:wager_app/themes/colors.dart';
 import 'package:wager_app/utils/bet_tile.dart';
 import 'package:wager_app/utils/make_bet_container.dart';
 
+import 'pages/settings_page.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -22,12 +24,17 @@ List betData = [
 ];
 
 class _HomePageState extends State<HomePage> {
-  void openSettings() {}
+  void openSettings() {
+    setState(() {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const SettingsPage()));
+    });
+  }
 
   void openNewBetPage() {
     setState(() {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => MakeBetPage()));
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const MakeBetPage()));
     });
   }
 
@@ -41,7 +48,7 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
               onPressed: openSettings,
-              icon: Icon(
+              icon: const Icon(
                 Icons.settings,
                 color: MyAppColors.accentColor,
                 size: 35,
