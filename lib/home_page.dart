@@ -57,37 +57,39 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 18.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Make a bet",
-              style: GoogleFonts.workSans(
-                  color: MyAppColors.textColor,
-                  fontSize: 35,
-                  fontWeight: FontWeight.w600),
-              textAlign: TextAlign.left,
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            MakeBetContainer(onTap: openNewBetPage),
-            const SizedBox(
-              height: 30,
-            ),
-            SizedBox(
-              height: 400,
-              child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: betData.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return BetTile(
-                        betTitle: betData[index][0],
-                        betDescription: betData[index][1],
-                        betAmount: betData[index][2]);
-                  }),
-            )
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Make a bet",
+                style: GoogleFonts.workSans(
+                    color: MyAppColors.textColor,
+                    fontSize: 35,
+                    fontWeight: FontWeight.w600),
+                textAlign: TextAlign.left,
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              MakeBetContainer(onTap: openNewBetPage),
+              const SizedBox(
+                height: 30,
+              ),
+              SizedBox(
+                height: 400,
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: betData.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return BetTile(
+                          betTitle: betData[index][0],
+                          betDescription: betData[index][1],
+                          betAmount: betData[index][2]);
+                    }),
+              )
+            ],
+          ),
         ),
       ),
     );
