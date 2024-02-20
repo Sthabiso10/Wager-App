@@ -4,55 +4,34 @@ import 'package:wager_app/themes/colors.dart';
 import 'package:wager_app/utils/bet_column.dart';
 
 class MakeBetPage extends StatefulWidget {
-  MakeBetPage({Key? key}) : super(key: key);
+  final Function(List<String>) onSaveBet;
+  const MakeBetPage({Key? key, required this.onSaveBet}) : super(key: key);
 
   @override
   State<MakeBetPage> createState() => _MakeBetPageState();
 }
 
-final TextEditingController _titleController = TextEditingController();
-final TextEditingController _descriptionController = TextEditingController();
-final TextEditingController _amountController = TextEditingController();
-
 class _MakeBetPageState extends State<MakeBetPage> {
-  void saveBetFailed() {
-    setState(() {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          backgroundColor: MyAppColors.containerColor,
-          title: Text(
-            'Invalid Input',
-            style: GoogleFonts.workSans(color: MyAppColors.textColor),
-          ),
-          content: Text(
-            'Please make sure all fields are entered',
-            style: GoogleFonts.workSans(color: MyAppColors.textColor),
-          ),
-          actions: [
-            TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  'Cancel',
-                  style: GoogleFonts.workSans(color: MyAppColors.textColor),
-                ))
-          ],
-        ),
-      );
-    });
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _amountController = TextEditingController();
+
+  void newBetCreate() {
+    List<String> newBet = [
+      _titleController.text,
+      _descriptionController.text,
+      _amountController.text,
+    ];
+    widget.onSaveBet(newBet); // Pass the new bet data to the callback
+    Navigator.pop(context); // Close MakeBetPage after saving the bet
   }
 
-  void saveBetSuccessful() {
-    setState(() {
-      showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-                backgroundColor: MyAppColors.containerColor,
-                title: Text('Save Bet'),
-              ));
-    });
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _descriptionController.dispose();
+    _amountController.dispose();
+    super.dispose();
   }
 
   @override
@@ -93,7 +72,7 @@ class _MakeBetPageState extends State<MakeBetPage> {
               child: Align(
                   alignment: Alignment.bottomCenter,
                   child: GestureDetector(
-                    onTap: saveBetFailed,
+                    onTap: newBetCreate,
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 90, vertical: 15),
