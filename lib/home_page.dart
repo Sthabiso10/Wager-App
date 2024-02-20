@@ -33,8 +33,8 @@ class _HomePageState extends State<HomePage> {
 
   void openNewBetPage() {
     setState(() {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const MakeBetPage()));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => MakeBetPage()));
     });
   }
 
