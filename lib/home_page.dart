@@ -20,7 +20,11 @@ List betData = [
     'Daniel says Arsenal will win the chanmpions league and Ethan does not',
     '200',
   ],
-  ['Best out of 3', 'Ethab says he will have more than 2', '50'],
+  [
+    'Best out of 3',
+    'Ethab says he will have more than 2',
+    '50',
+  ],
 ];
 
 class _HomePageState extends State<HomePage> {
@@ -32,9 +36,23 @@ class _HomePageState extends State<HomePage> {
   }
 
   void openNewBetPage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MakeBetPage(
+          onSaveBet: (newBet) {
+            setState(() {
+              betData.add(newBet); // Add the new bet data to betData list
+            });
+          },
+        ),
+      ),
+    );
+  }
+
+  void addNewBet(List<String> newBet) {
     setState(() {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => MakeBetPage()));
+      betData.add(newBet);
     });
   }
 
