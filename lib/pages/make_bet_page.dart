@@ -4,14 +4,18 @@ import 'package:wager_app/themes/colors.dart';
 import 'package:wager_app/utils/bet_column.dart';
 
 class MakeBetPage extends StatefulWidget {
-  const MakeBetPage({Key? key}) : super(key: key);
+  MakeBetPage({Key? key}) : super(key: key);
 
   @override
   State<MakeBetPage> createState() => _MakeBetPageState();
 }
 
+final TextEditingController _titleController = TextEditingController();
+final TextEditingController _descriptionController = TextEditingController();
+final TextEditingController _amountController = TextEditingController();
+
 class _MakeBetPageState extends State<MakeBetPage> {
-  void saveBet() {
+  void saveBetFailed() {
     setState(() {
       showDialog(
         context: context,
@@ -40,6 +44,17 @@ class _MakeBetPageState extends State<MakeBetPage> {
     });
   }
 
+  void saveBetSuccessful() {
+    setState(() {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                backgroundColor: MyAppColors.containerColor,
+                title: Text('Save Bet'),
+              ));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,10 +78,14 @@ class _MakeBetPageState extends State<MakeBetPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Column(
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                BetColumn(), // Assuming BetColumn is a widget that displays some content
+                BetColumn(
+                  titleController: _titleController,
+                  descriptionController: _descriptionController,
+                  amountController: _amountController,
+                ), // Assuming BetColumn is a widget that displays some content
               ],
             ),
             Padding(
@@ -74,7 +93,7 @@ class _MakeBetPageState extends State<MakeBetPage> {
               child: Align(
                   alignment: Alignment.bottomCenter,
                   child: GestureDetector(
-                    onTap: saveBet,
+                    onTap: saveBetFailed,
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 90, vertical: 15),
