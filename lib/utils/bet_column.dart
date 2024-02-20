@@ -4,8 +4,15 @@ import 'package:google_fonts/google_fonts.dart';
 import '../themes/colors.dart';
 
 class BetColumn extends StatelessWidget {
-  const BetColumn({
+  final TextEditingController titleController;
+  final TextEditingController descriptionController;
+  final TextEditingController amountController;
+
+  BetColumn({
     super.key,
+    required this.titleController,
+    required this.descriptionController,
+    required this.amountController,
   });
 
   @override
@@ -27,6 +34,7 @@ class BetColumn extends StatelessWidget {
               color: MyAppColors.containerColor,
               borderRadius: BorderRadius.circular(12)),
           child: TextField(
+            controller: titleController,
             decoration: InputDecoration(
               border: InputBorder.none,
               hintText: 'Title',
@@ -53,6 +61,7 @@ class BetColumn extends StatelessWidget {
               color: MyAppColors.containerColor,
               borderRadius: BorderRadius.circular(12)),
           child: TextField(
+            controller: descriptionController,
             decoration: InputDecoration(
               border: InputBorder.none,
               hintText: 'UCL Winner',
@@ -79,6 +88,7 @@ class BetColumn extends StatelessWidget {
               color: MyAppColors.containerColor,
               borderRadius: BorderRadius.circular(12)),
           child: TextField(
+            controller: amountController,
             decoration: InputDecoration(
               border: InputBorder.none,
               hintText: 'R200',
