@@ -92,7 +92,7 @@ class _HomePageState extends State<HomePage> {
               ),
               MakeBetContainer(onTap: openNewBetPage),
               const SizedBox(
-                height: 30,
+                height: 40,
               ),
               SizedBox(
                 height: 400,
