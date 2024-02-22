@@ -8,7 +8,7 @@ class BetColumn extends StatelessWidget {
   final TextEditingController descriptionController;
   final TextEditingController amountController;
 
-  BetColumn({
+  const BetColumn({
     super.key,
     required this.titleController,
     required this.descriptionController,
