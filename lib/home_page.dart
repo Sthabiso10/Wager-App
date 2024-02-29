@@ -31,8 +31,8 @@ List betData = [
 class _HomePageState extends State<HomePage> {
   void openSettings() {
     setState(() {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const SettingsPage()));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (ctx) => const SettingsPage()));
     });
   }
 
