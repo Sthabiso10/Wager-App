@@ -21,6 +21,7 @@ class BetTile extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20.0),
       child: InkWell(
+        splashColor: MyAppColors.accentColor,
         borderRadius: BorderRadius.circular(10),
         onTap: selectedBet,
         child: Container(
