@@ -36,17 +36,28 @@ class EditBetPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  betTitle,
-                  style: GoogleFonts.workSans(
-                      color: MyAppColors.textColor,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        betTitle,
+                        style: GoogleFonts.workSans(
+                            color: MyAppColors.textColor,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  width: 15,
                 ),
                 Text(
-                  betAmount,
+                  'R$betAmount',
                   style: GoogleFonts.workSans(
                       color: MyAppColors.textColor,
                       fontSize: 20,
@@ -55,14 +66,21 @@ class EditBetPage extends StatelessWidget {
               ],
             ),
             const SizedBox(
-              height: 40,
+              height: 20,
+            ),
+            Divider(
+              color: MyAppColors.accentColor,
+              height: 2,
+            ),
+            SizedBox(
+              height: 10,
             ),
             Text(
               betDescription,
               style: GoogleFonts.workSans(
                   color: MyAppColors.textColor,
                   fontSize: 20,
-                  fontWeight: FontWeight.w500),
+                  fontWeight: FontWeight.normal),
             )
           ],
         ),
