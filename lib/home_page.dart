@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:wager_app/pages/edit_bet_page.dart';
 import 'package:wager_app/pages/make_bet_page.dart';
 import 'package:wager_app/themes/colors.dart';
 import 'package:wager_app/utils/bet_tile.dart';
@@ -56,6 +57,18 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  void editBet(String betTiTle, String betDescription, String betAmount) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (ctx) => EditBetPage(
+          betTitle: betTiTle,
+          betDescription: betDescription,
+          betAmount: betAmount,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,9 +114,14 @@ class _HomePageState extends State<HomePage> {
                     itemCount: betData.length,
                     itemBuilder: (BuildContext context, int index) {
                       return BetTile(
-                          betTitle: betData[index][0],
-                          betDescription: betData[index][1],
-                          betAmount: betData[index][2]);
+                        betTitle: betData[index][0],
+                        betDescription: betData[index][1],
+                        betAmount: betData[index][2],
+                        selectedBet: () {
+                          editBet(betData[index][0], betData[index][1],
+                              betData[index][2]);
+                        },
+                      );
                     }),
               )
             ],
