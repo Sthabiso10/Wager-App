@@ -68,11 +68,11 @@ class EditBetPage extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            Divider(
+            const Divider(
               color: MyAppColors.accentColor,
               height: 2,
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Text(
