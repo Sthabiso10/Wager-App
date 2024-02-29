@@ -40,20 +40,29 @@ class EditBetPage extends StatelessWidget {
               children: [
                 Text(
                   betTitle,
-                  style: GoogleFonts.workSans(color: MyAppColors.textColor),
+                  style: GoogleFonts.workSans(
+                      color: MyAppColors.textColor,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500),
                 ),
                 Text(
                   betAmount,
-                  style: GoogleFonts.workSans(color: MyAppColors.textColor),
+                  style: GoogleFonts.workSans(
+                      color: MyAppColors.textColor,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500),
                 )
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 40,
             ),
             Text(
               betDescription,
-              style: GoogleFonts.workSans(color: MyAppColors.textColor),
+              style: GoogleFonts.workSans(
+                  color: MyAppColors.textColor,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500),
             )
           ],
         ),
