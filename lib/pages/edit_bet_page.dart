@@ -3,11 +3,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:wager_app/themes/colors.dart';
 
 class EditBetPage extends StatelessWidget {
-  const EditBetPage(
-      {super.key,
-      required this.betTitle,
-      required this.betDescription,
-      required this.betAmount});
+  const EditBetPage({
+    super.key,
+    required this.betTitle,
+    required this.betDescription,
+    required this.betAmount,
+  });
 
   final String betTitle;
   final String betDescription;
