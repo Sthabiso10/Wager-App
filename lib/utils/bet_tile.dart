@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import '../themes/colors.dart';
 
 class BetTile extends StatelessWidget {
   final String betTitle;
   final String betDescription;
   final String betAmount;
+  final DateTime selectedDate; // Add this property
 
-  const BetTile(
-      {super.key,
-      required this.betTitle,
-      required this.betDescription,
-      required this.betAmount,
-      required this.selectedBet});
+  const BetTile({
+    Key? key,
+    required this.betTitle,
+    required this.betDescription,
+    required this.betAmount,
+    required this.selectedDate, // Update constructor
+    required this.selectedBet,
+  }) : super(key: key);
 
   final void Function() selectedBet;
 
@@ -51,7 +55,14 @@ class BetTile extends StatelessWidget {
                           color: MyAppColors.textColor, fontSize: 16),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
-                    )
+                    ),
+                    Text(
+                      'Date: ${DateFormat.yMd().format(selectedDate)}', // Display the date
+                      style: TextStyle(
+                        color: MyAppColors.textColor,
+                        fontSize: 16,
+                      ),
+                    ),
                   ],
                 ),
               ),
