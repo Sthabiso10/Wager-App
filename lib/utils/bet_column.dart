@@ -119,7 +119,11 @@ class _BetColumnState extends State<BetColumn> {
             ),
           ),
         ),
+        const SizedBox(
+          height: 15,
+        ),
         Row(
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Text(
               _selectedDate == null
@@ -130,7 +134,11 @@ class _BetColumnState extends State<BetColumn> {
             ),
             IconButton(
                 onPressed: _presentDatePicker,
-                icon: Icon(Icons.calendar_view_day))
+                icon: Image.asset(
+                  'lib/assets/calendar.png',
+                  height: 30,
+                  color: MyAppColors.textColor,
+                ))
           ],
         )
       ],
