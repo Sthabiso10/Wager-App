@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import 'package:wager_app/models/bet_model.dart';
 import 'package:wager_app/pages/edit_bet_page.dart';
 import 'package:wager_app/pages/make_bet_page.dart';
 import 'package:wager_app/themes/colors.dart';
@@ -14,6 +16,27 @@ class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
 }
+
+final List<Bet> dummyBet = [
+  Bet(
+    date: DateTime.now(),
+    title: 'Basketball Match Bet',
+    description: 'Bet on the outcome of the basketball match.',
+    amount: 30.0,
+  ),
+  Bet(
+    date: DateTime.now(),
+    title: 'Soccer Match Bet',
+    description: 'Bet on the outcome of the soccer match.',
+    amount: 20.0,
+  ),
+  Bet(
+    date: DateTime.now(),
+    title: 'Tennis Match Bet',
+    description: 'Bet on the outcome of the tennis match.',
+    amount: 50.0,
+  ),
+];
 
 List betData = [
   [
@@ -69,6 +92,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  DateTime betDate = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -118,9 +143,13 @@ class _HomePageState extends State<HomePage> {
                         betDescription: betData[index][1],
                         betAmount: betData[index][2],
                         selectedBet: () {
-                          editBet(betData[index][0], betData[index][1],
-                              betData[index][2]);
+                          editBet(
+                            betData[index][0],
+                            betData[index][1],
+                            betData[index][2],
+                          );
                         },
+                        selectedDate: betDate,
                       );
                     }),
               )
