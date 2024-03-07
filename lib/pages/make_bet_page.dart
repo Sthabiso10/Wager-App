@@ -16,7 +16,10 @@ class _MakeBetPageState extends State<MakeBetPage> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _amountController = TextEditingController();
 
-  void newBetCreate() {
+  void newBetCreate(DateTime? selctedDate) {
+
+if(_titleController.text.isEmpty || _descriptionController.text.isEmpty || _amountController.text.isEmpty || {_showDialog();})
+
     List<String> newBet = [
       _titleController.text,
       _descriptionController.text,
@@ -24,6 +27,25 @@ class _MakeBetPageState extends State<MakeBetPage> {
     ];
     widget.onSaveBet(newBet); // Pass the new bet data to the callback
     Navigator.pop(context); // Close MakeBetPage after saving the bet
+  }
+
+  void _showDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Invalid Input'),
+        content: const Text(
+            'Please make sure a valid title, amount, date and category was entered to be able to save.'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Cancel'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -53,44 +75,46 @@ class _MakeBetPageState extends State<MakeBetPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 18.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                BetColumn(
-                  titleController: _titleController,
-                  descriptionController: _descriptionController,
-                  amountController: _amountController,
-                ), // Assuming BetColumn is a widget that displays some content
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 15.0),
-              child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: GestureDetector(
-                    onTap: newBetCreate,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 90, vertical: 15),
-                      decoration: BoxDecoration(
-                        color: Colors.blue,
-                        borderRadius: BorderRadius.circular(10),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  BetColumn(
+                    titleController: _titleController,
+                    descriptionController: _descriptionController,
+                    amountController: _amountController,
+                  ), // Assuming BetColumn is a widget that displays some content
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 15.0),
+                child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: GestureDetector(
+                      onTap: newBetCreate,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 90, vertical: 15),
+                        decoration: BoxDecoration(
+                          color: Colors.blue,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          'Save Bet',
+                          style: GoogleFonts.workSans(
+                              color: MyAppColors.textColor,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600),
+                        ),
                       ),
-                      child: Text(
-                        'Save Bet',
-                        style: GoogleFonts.workSans(
-                            color: MyAppColors.textColor,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                  )),
-            ),
-          ],
+                    )),
+              ),
+            ],
+          ),
         ),
       ),
     );
