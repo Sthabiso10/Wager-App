@@ -13,6 +13,7 @@ class Bet {
     required this.description,
     required this.amount,
   }) : id = uuid.v4();
+
   final String id;
   final String title;
   final String description;
