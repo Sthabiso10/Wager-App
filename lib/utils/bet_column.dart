@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:wager_app/models/bet_model.dart';
 
 import '../themes/colors.dart';
 
-class BetColumn extends StatelessWidget {
+class BetColumn extends StatefulWidget {
   final TextEditingController titleController;
   final TextEditingController descriptionController;
   final TextEditingController amountController;
@@ -14,6 +15,26 @@ class BetColumn extends StatelessWidget {
     required this.descriptionController,
     required this.amountController,
   });
+
+  @override
+  State<BetColumn> createState() => _BetColumnState();
+}
+
+class _BetColumnState extends State<BetColumn> {
+  DateTime? _selectedDate;
+
+  void _presentDatePicker() async {
+    final now = DateTime.now();
+    final firstDate = DateTime(now.year - 1, now.month, now.day);
+    final pickedDate = await showDatePicker(
+        context: context,
+        initialDate: now,
+        firstDate: firstDate,
+        lastDate: now);
+    setState(() {
+      _selectedDate = pickedDate;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +55,7 @@ class BetColumn extends StatelessWidget {
               color: MyAppColors.containerColor,
               borderRadius: BorderRadius.circular(12)),
           child: TextField(
-            controller: titleController,
+            controller: widget.titleController,
             decoration: InputDecoration(
               border: InputBorder.none,
               hintText: 'Title',
@@ -61,7 +82,7 @@ class BetColumn extends StatelessWidget {
               color: MyAppColors.containerColor,
               borderRadius: BorderRadius.circular(12)),
           child: TextField(
-            controller: descriptionController,
+            controller: widget.descriptionController,
             decoration: InputDecoration(
               border: InputBorder.none,
               hintText: 'UCL Winner',
@@ -88,7 +109,7 @@ class BetColumn extends StatelessWidget {
               color: MyAppColors.containerColor,
               borderRadius: BorderRadius.circular(12)),
           child: TextField(
-            controller: amountController,
+            controller: widget.amountController,
             decoration: InputDecoration(
               border: InputBorder.none,
               hintText: 'R200',
@@ -98,6 +119,20 @@ class BetColumn extends StatelessWidget {
             ),
           ),
         ),
+        Row(
+          children: [
+            Text(
+              _selectedDate == null
+                  ? 'No Date selcted'
+                  : formatter.format(_selectedDate!),
+              style: GoogleFonts.workSans(
+                  color: MyAppColors.textColor, fontSize: 18),
+            ),
+            IconButton(
+                onPressed: _presentDatePicker,
+                icon: Icon(Icons.calendar_view_day))
+          ],
+        )
       ],
     );
   }
