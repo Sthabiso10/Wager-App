@@ -40,6 +40,17 @@ dependencies:
   intl: ^0.19.0
   get_it: ^7.7.0
   stacked: ^3.4.3
+  google_nav_bar: ^5.0.6
+  firebase_auth: ^5.3.1
+  firebase_core: ^3.6.0
+  cloud_firestore: ^5.4.3
+  simple_animations: ^5.0.2
+  random_string: ^2.3.1
+  flutter_dotenv: ^5.2.1
+  lottie: ^3.2.0
+  flutter_local_notifications: ^18.0.1
+  timezone: ^0.10.0
+
 
 dev_dependencies:
   flutter_test:
@@ -64,7 +75,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - lib/assets/calendar.png
+    - assets/calendar.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
