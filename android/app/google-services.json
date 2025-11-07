@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "777852544049",
+    "project_id": "wager-app-34c29",
+    "storage_bucket": "wager-app-34c29.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:777852544049:android:a6cf5a5acec93d8a786110",
+        "android_client_info": {
+          "package_name": "com.example.wager_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOf_rM53z4EP42-3nMnHLWQaxxoHqG9Jw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
