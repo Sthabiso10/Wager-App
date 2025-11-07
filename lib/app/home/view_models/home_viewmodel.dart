@@ -1,0 +1,79 @@
+import 'package:flutter/material.dart';
+import 'package:stacked/stacked.dart';
+import 'package:wager_app/models/bet_model.dart';
+import 'package:wager_app/app/home/views/edit_bet_page.dart';
+import 'package:wager_app/app/home/views/make_bet_page.dart';
+import 'package:wager_app/app/settings/views/settings_view.dart';
+
+class HomeViewModel extends BaseViewModel {
+  final List<Bet> dummyBet = [
+    Bet(
+      date: DateTime.now(),
+      title: 'Basketball Match Bet',
+      description: 'Bet on the outcome of the basketball match.',
+      amount: 30.0,
+    ),
+    Bet(
+      date: DateTime.now(),
+      title: 'Soccer Match Bet',
+      description: 'Bet on the outcome of the soccer match.',
+      amount: 20.0,
+    ),
+    Bet(
+      date: DateTime.now(),
+      title: 'Tennis Match Bet',
+      description: 'Bet on the outcome of the tennis match.',
+      amount: 50.0,
+    ),
+  ];
+
+  List betData = [
+    [
+      'UCL Winner',
+      'Daniel says Arsenal will win the chanmpions league and Ethan does not',
+      '200',
+    ],
+    [
+      'Best out of 3',
+      'Ethab says he will have more than 2',
+      '50',
+    ],
+  ];
+
+  void openSettings(BuildContext context) {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (ctx) => const SettingsPage()));
+  }
+
+  void openNewBetPage(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MakeBetPage(
+          onSaveBet: (newBet) {
+            betData.add(newBet); // Add the new bet data to betData list
+          },
+        ),
+      ),
+    );
+  }
+
+  void addNewBet(List<String> newBet) {
+    betData.add(newBet);
+  }
+
+  void editBet(String betTiTle, String betDescription, String betAmount,
+      BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (ctx) => EditBetPage(
+          betTitle: betTiTle,
+          betDescription: betDescription,
+          betAmount: betAmount,
+        ),
+      ),
+    );
+  }
+
+  DateTime betDate = DateTime.now();
+}
