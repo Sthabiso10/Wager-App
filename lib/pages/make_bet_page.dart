@@ -16,15 +16,20 @@ class _MakeBetPageState extends State<MakeBetPage> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _amountController = TextEditingController();
 
-  void newBetCreate(DateTime? selctedDate) {
-
-if(_titleController.text.isEmpty || _descriptionController.text.isEmpty || _amountController.text.isEmpty || {_showDialog();})
+  void newBetCreate([DateTime? selectedDate]) {
+    if (_titleController.text.isEmpty ||
+        _descriptionController.text.isEmpty ||
+        _amountController.text.isEmpty) {
+      _showDialog();
+      return;
+    }
 
     List<String> newBet = [
       _titleController.text,
       _descriptionController.text,
       _amountController.text,
     ];
+
     widget.onSaveBet(newBet); // Pass the new bet data to the callback
     Navigator.pop(context); // Close MakeBetPage after saving the bet
   }
