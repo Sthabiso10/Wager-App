@@ -42,7 +42,7 @@ class NavigationMenu extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Image.asset(
-                        'assets/icons/water.png', // Path to your image asset
+                        'assets/home.png', // Path to your image asset
                         width: 24,
                         height: 24,
                         color: model.selectedIndex == 0
@@ -52,7 +52,7 @@ class NavigationMenu extends StatelessWidget {
                       const SizedBox(width: 4), // Space between image and text
                     ],
                   ),
-                  text: 'Irigation', // Text property should still be set
+                  text: 'Home', // Text property should still be set
                   textStyle: GoogleFonts.poppins(color: Colors.white),
                   iconColor:
                       model.selectedIndex == 0 ? backgroundColor : Colors.white,
@@ -67,7 +67,7 @@ class NavigationMenu extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Image.asset(
-                        'assets/icons/user.png', // Path to your image asset
+                        'assets/user.png', // Path to your image asset
                         width: 24,
                         height: 24,
                         color: model.selectedIndex == 1
