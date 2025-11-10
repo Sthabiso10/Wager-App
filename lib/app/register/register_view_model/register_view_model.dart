@@ -11,7 +11,6 @@ class RegisterViewModel extends BaseViewModel {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
-  final TextEditingController jobController = TextEditingController();
 
   // User registration method
   Future<void> registerUser(BuildContext context) async {
@@ -65,8 +64,7 @@ class RegisterViewModel extends BaseViewModel {
     if (userNameController.text.isEmpty ||
         emailController.text.isEmpty ||
         passwordController.text.isEmpty ||
-        confirmPasswordController.text.isEmpty ||
-        jobController.text.isEmpty) {
+        confirmPasswordController.text.isEmpty) {
       displayMessageToUser(
           message: 'Please fill in all fields.',
           context: context,
@@ -96,7 +94,6 @@ class RegisterViewModel extends BaseViewModel {
       await userDocRef.set({
         'email': user.email,
         'username': userNameController.text.trim(),
-        'job': jobController.text.trim(),
       });
       print('User document created successfully.');
     } catch (e) {
@@ -132,7 +129,7 @@ class RegisterViewModel extends BaseViewModel {
     emailController.dispose();
     passwordController.dispose();
     confirmPasswordController.dispose();
-    jobController.dispose();
+
     super.dispose();
   }
 
