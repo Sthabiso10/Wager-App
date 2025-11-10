@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:wager_app/app/profie/view_model/profile_viewmodel.dart';
+import 'package:wager_app/styles/colors.dart';
 
 class ProfileView extends StatelessWidget {
   const ProfileView({super.key});
@@ -9,6 +10,8 @@ class ProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<ProfileViewModel>.reactive(
         viewModelBuilder: () => ProfileViewModel(),
-        builder: (context, model, child) => Scaffold());
+        builder: (context, model, child) => Scaffold(
+              backgroundColor: backgroundColor,
+            ));
   }
 }
