@@ -15,32 +15,52 @@ class HomeView extends StatelessWidget {
         viewModelBuilder: () => HomeViewModel(),
         builder: (context, model, child) => Scaffold(
               backgroundColor: backgroundColor,
-              appBar: AppBar(
-                elevation: 0,
-                backgroundColor: Colors.transparent,
-                actions: [
-                  IconButton(
-                      onPressed: () => model.openSettings(context),
-                      icon: Icon(
-                        Icons.settings,
-                        color: colorAccent,
-                        size: 35,
-                      ))
-                ],
-              ),
-              body: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 18.0),
+              body: SafeArea(
+                left: true,
+                right: true,
+                top: true,
+                bottom: true,
+                minimum: const EdgeInsets.all(16),
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "Make a bet",
-                        style: GoogleFonts.workSans(
-                            color: colorText,
-                            fontSize: 35,
-                            fontWeight: FontWeight.w600),
-                        textAlign: TextAlign.left,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Welcome Back,",
+                                style: GoogleFonts.workSans(
+                                  color: colorText,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                                textAlign: TextAlign.start,
+                              ),
+                              Text('Sthabiso Damini',
+                                  style: GoogleFonts.workSans(
+                                      color: colorText,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600)),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              Icon(
+                                Icons.local_fire_department,
+                                color: Colors.red.shade400,
+                                size: 35,
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                       const SizedBox(
                         height: 30,
