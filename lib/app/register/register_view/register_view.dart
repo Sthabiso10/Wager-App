@@ -77,14 +77,6 @@ class _RegisterViewState extends State<RegisterView> {
                   const SizedBox(
                     height: 10,
                   ),
-                  MyTextField(
-                    hintText: 'Enter Job',
-                    obscureText: false,
-                    controller: model.jobController,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
