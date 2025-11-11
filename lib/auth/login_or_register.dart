@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wager_app/app/login/login_view/login_view.dart';
-import 'package:wager_app/app/register/register_view/register_view.dart';
+import 'package:wager_app/app/profie/views/register/register_view/register_view.dart';
 
 class LoginOrRegister extends StatefulWidget {
   const LoginOrRegister({super.key});
