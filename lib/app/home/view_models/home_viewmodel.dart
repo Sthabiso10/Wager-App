@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:wager_app/models/bet_model.dart';
@@ -6,6 +8,8 @@ import 'package:wager_app/app/home/views/make_bet_page.dart';
 import 'package:wager_app/app/settings/views/settings_view.dart';
 
 class HomeViewModel extends BaseViewModel {
+  User? get currentUser => FirebaseAuth.instance.currentUser;
+
   final List<Bet> dummyBet = [
     Bet(
       date: DateTime.now(),
@@ -73,6 +77,14 @@ class HomeViewModel extends BaseViewModel {
         ),
       ),
     );
+  }
+
+  Future<DocumentSnapshot<Map<String, dynamic>>> getFirstName() async {
+    final userName = await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(currentUser!.uid)
+        .get();
+    return userName;
   }
 
   DateTime betDate = DateTime.now();
