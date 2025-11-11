@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:wager_app/app/global_widgets/my_button.dart';
 import 'package:wager_app/app/global_widgets/my_textfield.dart';
-import 'package:wager_app/app/register/register_view_model/register_view_model.dart';
+import 'package:wager_app/app/profie/views/register/register_view_model/register_view_model.dart';
 import 'package:wager_app/styles/colors.dart';
 
 class RegisterView extends StatefulWidget {
@@ -59,6 +59,14 @@ class _RegisterViewState extends State<RegisterView> {
                       hintText: 'Email',
                       obscureText: false,
                       controller: model.emailController),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  MyTextField(
+                    hintText: 'First Name ',
+                    obscureText: false,
+                    controller: model.firstNameController,
+                  ),
                   const SizedBox(
                     height: 10,
                   ),
