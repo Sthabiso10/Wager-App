@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stacked/stacked.dart';
@@ -36,28 +37,62 @@ class HomeView extends StatelessWidget {
                                 "Welcome Back,",
                                 style: GoogleFonts.workSans(
                                   color: colorText,
-                                  fontSize: 14,
+                                  fontSize: 16,
                                   fontWeight: FontWeight.w400,
                                 ),
                                 textAlign: TextAlign.start,
                               ),
-                              Text('Sthabiso Damini',
-                                  style: GoogleFonts.workSans(
-                                      color: colorText,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600)),
+                              FutureBuilder<
+                                  DocumentSnapshot<Map<String, dynamic>>>(
+                                future: model.getFirstName(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return Text(
+                                      "Loading...",
+                                      style: TextStyle(
+                                          color: colorText,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
+                                    );
+                                  } else if (snapshot.hasError) {
+                                    return Text(
+                                      "Error: ${snapshot.error}",
+                                      style: TextStyle(
+                                          color: colorText,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
+                                    );
+                                  } else if (snapshot.hasData &&
+                                      snapshot.data?.data() != null) {
+                                    Map<String, dynamic>? data = snapshot.data!
+                                        .data(); // Extract data map
+                                    String firstName = data?['firstName'] ??
+                                        "No First Name"; // Handle null
+                                    return Text(
+                                      firstName,
+                                      style: TextStyle(
+                                          color: colorText,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
+                                    );
+                                  } else {
+                                    return Text(
+                                      "No data available",
+                                      style: TextStyle(
+                                          color: colorText,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
+                                    );
+                                  }
+                                },
+                              ),
                             ],
                           ),
                           Row(
                             children: [
-                              const SizedBox(
-                                width: 8,
-                              ),
-                              Icon(
-                                Icons.local_fire_department,
-                                color: Colors.red.shade400,
-                                size: 35,
-                              ),
+                              Image.asset("assets/noti.png",
+                                  height: 35, color: Colors.white),
                             ],
                           ),
                         ],
