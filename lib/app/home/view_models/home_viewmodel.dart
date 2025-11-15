@@ -79,12 +79,16 @@ class HomeViewModel extends BaseViewModel {
     );
   }
 
-  Future<DocumentSnapshot<Map<String, dynamic>>> getFirstName() async {
-    final userName = await FirebaseFirestore.instance
+  Map<String, dynamic>? userData;
+
+  Future<void> loadUserData() async {
+    final doc = await FirebaseFirestore.instance
         .collection('Users')
         .doc(currentUser!.uid)
         .get();
-    return userName;
+
+    userData = doc.data();
+    notifyListeners();
   }
 
   DateTime betDate = DateTime.now();
