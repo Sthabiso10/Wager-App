@@ -119,7 +119,7 @@ class ProfileView extends StatelessWidget {
                             child: Column(
                               children: [
                                 Text(
-                                  'Hello, ${model.userData?["username"] ?? 'No Username'}!',
+                                  'Hello, ${model.userData?["username"] ?? 'loading...'}!',
                                   style: TextStyle(
                                       fontSize: 22,
                                       fontWeight: FontWeight.bold,
@@ -127,7 +127,7 @@ class ProfileView extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 6),
                                 Text(
-                                  model.userData?["email"] ?? 'No Email',
+                                  model.userData?["email"] ?? 'loading...',
                                   style:
                                       TextStyle(fontSize: 15, color: colorText),
                                 ),
