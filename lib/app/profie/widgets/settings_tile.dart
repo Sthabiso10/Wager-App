@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wager_app/styles/colors.dart';
 
 class SettingsTile extends StatelessWidget {
   final IconData icon;
@@ -17,8 +18,11 @@ class SettingsTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(icon, color: Colors.blue),
-      title: Text(title, style: const TextStyle(fontWeight: FontWeight.w500)),
+      leading: Icon(icon, color: colorAccent),
+      title: Text(
+        title,
+        style: TextStyle(fontWeight: FontWeight.w500, color: colorText),
+      ),
       trailing: trailing,
       onTap: onTap,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
