@@ -43,7 +43,7 @@ class HomeView extends StatelessWidget {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          model.userData?['firstName'] ?? 'User',
+                          model.userData?['firstName'] ?? 'loading...',
                           style: TextStyle(
                             color: colorText,
                             fontSize: 20,
