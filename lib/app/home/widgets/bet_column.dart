@@ -49,7 +49,7 @@ class _BetColumnState extends State<BetColumn> {
           height: 15,
         ),
         Container(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
               color: containerColor, borderRadius: BorderRadius.circular(12)),
           child: TextField(
