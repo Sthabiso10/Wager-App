@@ -109,7 +109,8 @@ class SettingsView extends StatelessWidget {
                             icon: Icons.logout,
                             title: 'Logout',
                             onTap: () {
-                              // TODO: Implement logout
+                              if (!context.mounted) return;
+                              model.logout(context);
                             },
                             trailing:
                                 const Icon(Icons.arrow_forward_ios, size: 16),
