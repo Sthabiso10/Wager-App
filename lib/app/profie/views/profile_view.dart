@@ -101,10 +101,11 @@ class ProfileView extends StatelessWidget {
                         color: containerColor,
                         borderRadius: BorderRadius.circular(24),
                         border: Border.all(
-                            color: Colors.white.withOpacity(0.5), width: 1.5),
+                            color: Colors.white.withValues(alpha: 0.5),
+                            width: 1.5),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.blue.shade100.withOpacity(0.2),
+                            color: Colors.blue.shade100.withValues(alpha: 0.2),
                             blurRadius: 16,
                             offset: const Offset(0, 8),
                           ),
@@ -226,8 +227,9 @@ class ProfileView extends StatelessWidget {
                                 ],
                               ),
                             );
+                            if (!context.mounted) return;
                             if (shouldLogout == true) {
-                              // TODO: Implement logout logic
+                              model.logout(context);
                             }
                           },
                         ),
@@ -312,7 +314,7 @@ class _ProfileActionButton extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: color.withOpacity(0.12),
+              color: color.withAlpha(40),
               shape: BoxShape.circle,
             ),
             child: Icon(icon, color: color, size: 28),
