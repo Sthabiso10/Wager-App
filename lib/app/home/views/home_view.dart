@@ -24,9 +24,6 @@ class HomeView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // -------------------------
-                // TOP HEADER
-                // -------------------------
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -54,28 +51,23 @@ class HomeView extends StatelessWidget {
                     ),
 
                     // Notification icon
-                    Image.asset(
-                      "assets/noti.png",
-                      height: 35,
-                      color: Colors.white,
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, '/inbox');
+                      },
+                      child: Image.asset(
+                        "assets/noti.png",
+                        height: 35,
+                        color: Colors.white,
+                      ),
                     ),
                   ],
                 ),
-
                 const SizedBox(height: 20),
-
-                // -------------------------
-                // MAKE BET BUTTON
-                // -------------------------
                 MakeBetContainer(
                   onTap: () => model.openNewBetPage(context),
                 ),
-
                 const SizedBox(height: 30),
-
-                // -------------------------
-                // BET LIST
-                // -------------------------
                 SizedBox(
                   height: 400,
                   child: ListView.builder(
