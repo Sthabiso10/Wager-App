@@ -11,8 +11,8 @@ void displayMessageToUser({
 }) {
   // Map message types to corresponding images
   final Map<MessageType, String> imagePaths = {
-    MessageType.success: 'assets/icons/success.png',
-    MessageType.failure: 'assets/icons/failure.png',
+    MessageType.success: 'assets/success.png',
+    MessageType.failure: 'assets/failure.png',
   };
 
   // Retrieve the image path based on the type
