@@ -99,9 +99,10 @@ class RegisterViewModel extends BaseViewModel {
         'firstName': firstNameController.text.trim(),
         'createdAt': FieldValue.serverTimestamp(),
       });
-      print('User document created successfully.');
+
+      debugPrint('User document created successfully.');
     } catch (e) {
-      print('Error creating user document: $e');
+      debugPrint('Error creating user document: $e');
     }
   }
 
@@ -145,9 +146,10 @@ class RegisterViewModel extends BaseViewModel {
           await FirebaseFirestore.instance.collection("Users").get();
 
       // Print the number of documents in the Users collection
-      print('Number of documents in Users collection: ${querySnapshot.size}');
+      debugPrint(
+          'Number of documents in Users collection: ${querySnapshot.size}');
     } catch (e) {
-      print('Error getting documents: $e');
+      debugPrint('Error getting documents: $e');
     }
   }
 }
