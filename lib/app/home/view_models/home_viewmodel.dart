@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:wager_app/models/bet_model.dart';
 import 'package:wager_app/app/home/views/edit_bet_page.dart';
-import 'package:wager_app/app/home/views/make_bet_page.dart';
+
 import 'package:wager_app/app/settings/views/settings_view.dart';
 
 class HomeViewModel extends BaseViewModel {
@@ -47,19 +47,6 @@ class HomeViewModel extends BaseViewModel {
   void openSettings(BuildContext context) {
     Navigator.push(
         context, MaterialPageRoute(builder: (ctx) => const SettingsPage()));
-  }
-
-  void openNewBetPage(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => MakeBetPage(
-          onSaveBet: (newBet) {
-            betData.add(newBet); // Add the new bet data to betData list
-          },
-        ),
-      ),
-    );
   }
 
   void addNewBet(List<String> newBet) {
