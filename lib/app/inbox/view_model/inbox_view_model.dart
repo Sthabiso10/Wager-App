@@ -80,6 +80,7 @@ class InboxViewModel extends BaseViewModel {
       await batch.commit();
 
       // Show the appropriate message to the user
+      if (!context.mounted) return;
       newEventSnackBar(
         action == 'accept'
             ? 'Friend Request Accepted'
@@ -89,7 +90,7 @@ class InboxViewModel extends BaseViewModel {
       );
     } catch (e) {
       // Handle any errors that might occur during the batch operation
-      print('Error responding to friend request: $e');
+      debugPrint('Error responding to friend request: $e');
       newEventSnackBar(
         'Something went wrong. Please try again.',
         context,
@@ -118,13 +119,45 @@ class InboxViewModel extends BaseViewModel {
     String action,
     BuildContext context,
   ) async {
-    final email = await resolveEmailByUsername(fromUsername);
-    if (email == null) {
+    if (!context.mounted) return;
+
+    try {
+      // Validate inputs
+      if (requestId.isEmpty || fromUsername.isEmpty || action.isEmpty) {
+        throw ArgumentError('Invalid input parameters');
+      }
+
+      final email = await resolveEmailByUsername(fromUsername);
+
+      if (!context.mounted) return;
+
+      if (email == null) {
+        newEventSnackBar(
+          'Could not find user "$fromUsername".',
+          context,
+          errorColor,
+        );
+        return;
+      }
+
+      await respondToFriendRequest(requestId, email, action, context);
+    } on ArgumentError catch (e) {
+      if (!context.mounted) return;
       newEventSnackBar(
-          'Could not find sender for this request.', context, errorColor);
-      return;
+        'Invalid request: ${e.message}',
+        context,
+        errorColor,
+      );
+    } catch (error) {
+      if (!context.mounted) return;
+      newEventSnackBar(
+        'Failed to process friend request.',
+        context,
+        errorColor,
+      );
+      // Optionally log the error for debugging
+      debugPrint('Friend request error: $error');
     }
-    await respondToFriendRequest(requestId, email, action, context);
   }
 
   // If you need a username from the sender to be displayed
