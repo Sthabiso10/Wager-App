@@ -114,7 +114,7 @@ class AddFriendsView extends StatelessWidget {
                                 style:
                                     TextStyle(color: colorText, fontSize: 16),
                               ),
-                              Image.asset('assets/icons/crowd.png')
+                              Image.asset('assets/crowd.png')
                             ],
                           ));
                         }
