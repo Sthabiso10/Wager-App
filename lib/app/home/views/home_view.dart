@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stacked/stacked.dart';
 import 'package:wager_app/app/home/view_models/home_viewmodel.dart';
+import 'package:wager_app/app/home/widgets/actions_widget.dart';
+import 'package:wager_app/app/home/widgets/active_bets_widget.dart';
 import 'package:wager_app/styles/colors.dart';
-import 'package:wager_app/app/home/widgets/bet_tile.dart';
-import 'package:wager_app/app/home/widgets/make_bet_container.dart';
+import 'package:wager_app/styles/dimensions.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -51,46 +52,38 @@ class HomeView extends StatelessWidget {
                     ),
 
                     // Notification icon
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, '/inbox');
-                      },
-                      child: Image.asset(
-                        "assets/noti.png",
-                        height: 35,
-                        color: Colors.white,
-                      ),
+
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(context, '/friends');
+                          },
+                          child: Image.asset(
+                            "assets/plus.png",
+                            height: 40,
+                            color: Colors.white,
+                          ),
+                        ),
+                        spacingWidth16,
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(context, '/inbox');
+                          },
+                          child: Image.asset(
+                            "assets/noti.png",
+                            height: 35,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-                const SizedBox(height: 20),
-                MakeBetContainer(
-                  onTap: () => model.openNewBetPage(context),
-                ),
-                const SizedBox(height: 30),
-                SizedBox(
-                  height: 400,
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: model.betData.length,
-                    itemBuilder: (context, index) {
-                      return BetTile(
-                        betTitle: model.betData[index][0],
-                        betDescription: model.betData[index][1],
-                        betAmount: model.betData[index][2],
-                        selectedBet: () {
-                          model.editBet(
-                            model.betData[index][0],
-                            model.betData[index][1],
-                            model.betData[index][2],
-                            context,
-                          );
-                        },
-                        selectedDate: model.betDate,
-                      );
-                    },
-                  ),
-                ),
+                const SizedBox(height: 10),
+                const ActionsWidget(),
+                const SizedBox(height: 10),
+                const ActiveBetsWidget()
               ],
             ),
           ),
