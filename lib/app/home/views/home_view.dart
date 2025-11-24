@@ -18,13 +18,13 @@ class HomeView extends StatelessWidget {
         model.loadUserData();
       },
       builder: (context, model, child) => Scaffold(
-        backgroundColor: backgroundColor,
-        body: SafeArea(
-          minimum: const EdgeInsets.all(16),
-          child: SingleChildScrollView(
+          backgroundColor: backgroundColor,
+          body: SafeArea(
+            minimum: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // --- Your top section stays the same ---
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -50,59 +50,72 @@ class HomeView extends StatelessWidget {
                         ),
                       ],
                     ),
-
-                    // Notification icon
-
                     Row(
                       children: [
                         GestureDetector(
                           onTap: () {
                             Navigator.pushNamed(context, '/friends');
                           },
-                          child: Image.asset(
-                            "assets/plus.png",
-                            height: 40,
-                            color: Colors.white,
-                          ),
+                          child: Image.asset("assets/plus.png",
+                              height: 35, color: Colors.white),
                         ),
                         spacingWidth16,
                         GestureDetector(
                           onTap: () {
                             Navigator.pushNamed(context, '/inbox');
                           },
-                          child: Image.asset(
-                            "assets/noti.png",
-                            height: 35,
-                            color: Colors.white,
-                          ),
+                          child: Image.asset("assets/noti.png",
+                              height: 30, color: Colors.white),
                         ),
                       ],
                     ),
                   ],
                 ),
+
                 const SizedBox(height: 10),
+
                 const ActionsWidget(),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      ' Friends ',
-                      style: GoogleFonts.workSans(
-                        color: colorText,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
+
+                const SizedBox(height: 20),
+
+                Text(
+                  "Friends",
+                  style: TextStyle(
+                    color: colorText,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                const ActiveBetsWidget()
+                const SizedBox(height: 10),
+                CircleAvatar(
+                  radius: 35,
+                  backgroundColor: Colors.blueAccent,
+                  child: Text(
+                    model.userData != null &&
+                            model.userData!['firstName'] != null
+                        ? model.userData!['firstName'][0]
+                        : '',
+                    style: const TextStyle(color: Colors.white, fontSize: 24),
+                  ),
+                ),
+
+                const SizedBox(height: 10),
+
+                Text(
+                  "Active Bets",
+                  style: TextStyle(
+                    color: colorText,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                const Expanded(
+                  child: ActiveBetsWidget(),
+                ),
               ],
             ),
-          ),
-        ),
-      ),
+          )),
     );
   }
 }
