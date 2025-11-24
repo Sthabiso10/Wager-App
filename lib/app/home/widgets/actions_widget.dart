@@ -1,106 +1,115 @@
+import 'dart:ui'; // <-- Required for ImageFilter
 import 'package:flutter/material.dart';
-import 'package:wager_app/styles/colors.dart';
 
 class ActionsWidget extends StatelessWidget {
   const ActionsWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(18),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+        child: Container(
+          height: 130,
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.05), // semi-transparent
+            borderRadius: BorderRadius.circular(18),
+            border: Border.all(color: Colors.white.withOpacity(0.08), width: 1),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.25),
+                blurRadius: 20,
+                spreadRadius: -5,
+                offset: const Offset(0, 10),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                  child: _buildStatItem(
+                icon: Icons.people,
+                count: "12",
+                label: "Friends",
+                iconColor: Colors.blueAccent,
+              )),
+              _verticalDivider(),
+              Expanded(
+                  child: _buildStatItem(
+                icon: Icons.emoji_events,
+                count: "9",
+                label: "Won",
+                iconColor: Colors.greenAccent,
+              )),
+              _verticalDivider(),
+              Expanded(
+                  child: _buildStatItem(
+                icon: Icons.close,
+                count: "3",
+                label: "Lost",
+                iconColor: Colors.redAccent,
+              )),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _verticalDivider() {
     return Container(
-      height: 120,
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
-        color: containerColor,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          // Friends Count
-          const Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.people, color: Colors.white, size: 28),
-                SizedBox(height: 6),
-                Text(
-                  "12",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20),
-                ),
-                SizedBox(height: 2),
-                Text(
-                  "Friends",
-                  style: TextStyle(color: Colors.white70, fontSize: 14),
-                ),
-              ],
-            ),
-          ),
+      height: 60,
+      width: 1.2,
+      margin: const EdgeInsets.symmetric(horizontal: 10),
+      color: Colors.white.withOpacity(0.12),
+    );
+  }
 
-          // Divider
-          Container(
-            height: 50,
-            width: 1,
-            color: Colors.white54,
+  Widget _buildStatItem({
+    required IconData icon,
+    required String count,
+    required String label,
+    required Color iconColor,
+  }) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: iconColor.withOpacity(0.15),
+            boxShadow: [
+              BoxShadow(
+                color: iconColor.withOpacity(0.4),
+                blurRadius: 15,
+                spreadRadius: 1,
+              ),
+            ],
           ),
-
-          // Bets Won
-          const Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.emoji_events, color: Colors.white, size: 28),
-                SizedBox(height: 6),
-                Text(
-                  "9",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20),
-                ),
-                SizedBox(height: 2),
-                Text(
-                  "Won",
-                  style: TextStyle(color: Colors.white70, fontSize: 14),
-                ),
-              ],
-            ),
+          child: Icon(icon, color: iconColor, size: 24),
+        ),
+        const SizedBox(height: 6),
+        Text(
+          count,
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+            color: Colors.white,
           ),
-
-          // Divider
-          Container(
-            height: 50,
-            width: 1,
-            color: Colors.white54,
+        ),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 14,
+            color: Colors.white.withOpacity(0.7),
+            fontWeight: FontWeight.w400,
           ),
-
-          // Bets Lost
-          const Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.close, color: Colors.white, size: 28),
-                SizedBox(height: 6),
-                Text(
-                  "3",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20),
-                ),
-                SizedBox(height: 2),
-                Text(
-                  "Lost",
-                  style: TextStyle(color: Colors.white70, fontSize: 14),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
