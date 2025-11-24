@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_nav_bar/google_nav_bar.dart'; // Import the Google Nav Bar package
+import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:stacked/stacked.dart';
 import 'package:wager_app/app/home/views/home_view.dart';
 import 'package:wager_app/app/navigation%20bar/view_models/navigation_view_model.dart';
@@ -11,7 +11,7 @@ class NavigationMenu extends StatelessWidget {
   NavigationMenu({super.key});
 
   final List<Widget> _pages = [
-    const HomeView(), // Placeholder for HomeView
+    const HomeView(),
     const ProfileView(),
   ];
 
@@ -20,76 +20,70 @@ class NavigationMenu extends StatelessWidget {
     return ViewModelBuilder<NavigationMenuViewModel>.reactive(
       viewModelBuilder: () => NavigationMenuViewModel(),
       builder: (context, model, child) => Scaffold(
+        backgroundColor: backgroundColor,
         resizeToAvoidBottomInset: false,
-        body: IndexedStack(index: model.selectedIndex, children: _pages),
-        bottomNavigationBar: Container(
-          color: backgroundColor, // Set the color of the container
-          padding: const EdgeInsets.symmetric(horizontal: 60.0, vertical: 10),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: GNav(
-              backgroundColor: containerColor, // Background color of GNav
-              color: Colors.white, // Icon color when not selected
-              activeColor: Colors.white, // Icon color when selected
-              iconSize: 25,
-              gap: 8,
+        body: IndexedStack(
+          index: model.selectedIndex,
+          children: _pages,
+        ),
 
-              tabs: [
-                GButton(
-                  icon: Icons.circle, // Set an icon (invisible)
-                  // Make the icon invisible
-                  leading: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Image.asset(
-                        'assets/home.png', // Path to your image asset
-                        width: 24,
-                        height: 24,
-                        color: model.selectedIndex == 0
-                            ? Colors.white
-                            : Colors.white70,
-                      ),
-                      const SizedBox(width: 4), // Space between image and text
-                    ],
-                  ),
-                  text: 'Home', // Text property should still be set
-                  textStyle: GoogleFonts.poppins(color: Colors.white),
-                  iconColor:
-                      model.selectedIndex == 0 ? backgroundColor : Colors.white,
-                  onPressed: () {
-                    model.updateIndex(0);
-                  },
+        // ---- FLOATING PILL NAV BAR ----
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
+          child: Material(
+            elevation: 12, // shadow
+            borderRadius: BorderRadius.circular(50), // pill shape
+            color: containerColor, // nav background color
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              child: GNav(
+                backgroundColor: Colors.transparent, // let Material show
+                gap: 10,
+                activeColor: Colors.white,
+                iconSize: 26,
+                tabBackgroundColor: Colors.white.withOpacity(0.08),
+                tabActiveBorder: Border.all(
+                  color: Colors.white.withOpacity(0.15),
+                  width: 1,
                 ),
-                GButton(
-                  icon: Icons.circle, // Set an icon (invisible)
-                  // Make the icon invisible
-                  leading: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Image.asset(
-                        'assets/user.png', // Path to your image asset
-                        width: 24,
-                        height: 24,
-                        color: model.selectedIndex == 1
-                            ? Colors.white
-                            : Colors.white70,
-                      ),
-                      const SizedBox(width: 4), // Space between image and text
-                    ],
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                duration: const Duration(milliseconds: 350),
+                selectedIndex: model.selectedIndex,
+                onTabChange: model.updateIndex,
+                tabs: [
+                  GButton(
+                    icon: Icons.home_outlined,
+                    leading: Image.asset(
+                      'assets/home.png',
+                      height: 24,
+                      color: model.selectedIndex == 0
+                          ? Colors.white
+                          : Colors.white70,
+                    ),
+                    text: "Home",
+                    textStyle: GoogleFonts.poppins(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                  text: 'Profile', // Text property should still be set
-                  textStyle: GoogleFonts.poppins(color: Colors.white),
-                  iconColor:
-                      model.selectedIndex == 1 ? backgroundColor : Colors.white,
-                  onPressed: () {
-                    model.updateIndex(1);
-                  },
-                ),
-              ],
-              selectedIndex: model.selectedIndex,
-              onTabChange: (index) {
-                model.updateIndex(index);
-              },
+                  GButton(
+                    icon: Icons.person_outlined,
+                    leading: Image.asset(
+                      'assets/user.png',
+                      height: 24,
+                      color: model.selectedIndex == 1
+                          ? Colors.white
+                          : Colors.white70,
+                    ),
+                    text: "Profile",
+                    textStyle: GoogleFonts.poppins(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
