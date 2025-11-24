@@ -83,6 +83,20 @@ class HomeView extends StatelessWidget {
                 const SizedBox(height: 10),
                 const ActionsWidget(),
                 const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      ' Friends ',
+                      style: GoogleFonts.workSans(
+                        color: colorText,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
                 const ActiveBetsWidget()
               ],
             ),
