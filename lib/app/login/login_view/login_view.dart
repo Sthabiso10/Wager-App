@@ -4,7 +4,6 @@ import 'package:wager_app/app/global_widgets/my_button.dart';
 import 'package:wager_app/app/global_widgets/my_textfield.dart';
 import 'package:wager_app/app/login/view_models/login_view_model.dart';
 import 'package:wager_app/styles/colors.dart';
-import 'package:wager_app/styles/dimensions.dart';
 
 class LoginView extends StatefulWidget {
   final void Function()? onTap;
@@ -21,104 +20,150 @@ class _LoginViewState extends State<LoginView> {
       viewModelBuilder: () => LoginViewModel(),
       builder: (context, model, child) => Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: backgroundColor,
         body: Stack(
           children: [
+            // 🔥 Background image
+            Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/wager_background.jpg'),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+
+            // 🔥 Dark overlay to make the UI readable
+            Container(
+              color: Colors.black.withOpacity(0.55),
+            ),
+
+            // 🔥 Main content
             Center(
               child: Padding(
-                padding: const EdgeInsets.all(25.0),
+                padding: const EdgeInsets.symmetric(horizontal: 28.0),
                 child: SingleChildScrollView(
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      // Logo
                       Image.asset(
                         'assets/user.png',
-                        height: 140,
+                        height: 120,
+                        color: Colors.white.withOpacity(0.9),
                       ),
+
+                      const SizedBox(height: 20),
+
+                      // Title
                       Text(
                         'Login',
                         style: TextStyle(
-                            color: colorText,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 30),
+                          color: Colors.white,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 32,
+                          letterSpacing: 1,
+                        ),
                       ),
+
+                      const SizedBox(height: 6),
+
+                      // Subtitle
                       const Text(
-                        'Enter email and password to login.',
-                        style: TextStyle(color: Colors.white60, fontSize: 16),
+                        'Enter your email and password to continue.',
+                        style: TextStyle(
+                          color: Colors.white70,
+                          fontSize: 15,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      const SizedBox(
-                        height: 30,
-                      ),
+
+                      const SizedBox(height: 35),
+
+                      // Email
                       MyTextField(
-                          hintText: 'Email',
-                          obscureText: false,
-                          controller: model.emailController),
-                      const SizedBox(
-                        height: 10,
+                        hintText: 'Email',
+                        obscureText: false,
+                        controller: model.emailController,
                       ),
+
+                      const SizedBox(height: 14),
+
+                      // Password
                       MyTextField(
-                          hintText: 'Password',
-                          obscureText: true,
-                          controller: model.passwordController),
-                      const SizedBox(
-                        height: 10,
+                        hintText: 'Password',
+                        obscureText: true,
+                        controller: model.passwordController,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(
-                            'Forgot Password?',
-                            style: TextStyle(
-                                color: colorText, fontWeight: FontWeight.bold),
+
+                      const SizedBox(height: 10),
+
+                      // Forgot password
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          'Forgot Password?',
+                          style: TextStyle(
+                            color: colorAccent,
+                            fontWeight: FontWeight.w600,
                           ),
-                          const SizedBox(
-                            height: 25,
-                          ),
-                        ],
+                        ),
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      MyButton(
+
+                      const SizedBox(height: 25),
+
+                      // Login button
+                      SizedBox(
+                        width: double.infinity,
+                        child: MyButton(
                           text: 'Login',
                           onPressed: () {
                             model.login(context);
-                          }),
-                      const SizedBox(
-                        height: 25,
+                          },
+                        ),
                       ),
+
+                      const SizedBox(height: 22),
+
+                      // Register
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
+                          const Text(
                             "Don't have an account?",
-                            style: TextStyle(color: colorText, fontSize: 16),
+                            style: TextStyle(
+                              color: Colors.white70,
+                              fontSize: 15,
+                            ),
                           ),
-                          const SizedBox(
-                            width: 5,
-                          ),
+                          const SizedBox(width: 6),
                           GestureDetector(
                             onTap: widget.onTap,
                             child: Text(
                               "Register Here",
                               style: TextStyle(
-                                  color: colorAccent,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16),
+                                color: colorAccent,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                              ),
                             ),
                           )
                         ],
                       ),
-                      spacingHeight16,
+
+                      const SizedBox(height: 25),
+
+                      // Divider
                       Divider(
-                        color: colorText,
+                        color: Colors.white24,
                         thickness: 1,
                       ),
-                      spacingHeight16,
+
+                      const SizedBox(height: 12),
+
                       const Text(
-                        'By continuing you agree to our Terms of Use and Privacy Policy.',
+                        'By continuing you agree to our Terms of Use\nand Privacy Policy.',
                         style: TextStyle(
-                          color: Colors.white60,
+                          color: Colors.white54,
+                          fontSize: 13,
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -127,8 +172,10 @@ class _LoginViewState extends State<LoginView> {
                 ),
               ),
             ),
+
+            // 🔥 Loading overlay
             if (model.isBusy) ...[
-              const ModalBarrier(dismissible: false, color: Colors.black26),
+              const ModalBarrier(dismissible: false, color: Colors.black38),
               const Center(child: CircularProgressIndicator()),
             ]
           ],
