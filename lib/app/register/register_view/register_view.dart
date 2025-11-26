@@ -21,118 +21,151 @@ class _RegisterViewState extends State<RegisterView> {
       viewModelBuilder: () => RegisterViewModel(),
       builder: (context, model, child) => Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: backgroundColor,
-        body: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(25.0),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    'assets/user.png',
-                    height: 140,
-                    color: Colors.white,
-                  ),
-                  Text(
-                    'Register',
-                    style: TextStyle(
-                        color: colorText,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30),
-                  ),
-                  const Text(
-                    'Please create a new account to continue.',
-                    style: TextStyle(color: Colors.white60, fontSize: 16),
-                  ),
-                  const SizedBox(
-                    height: 40,
-                  ),
-                  MyTextField(
-                      hintText: 'Username',
-                      obscureText: false,
-                      controller: model.userNameController),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  MyTextField(
-                      hintText: 'Email',
-                      obscureText: false,
-                      controller: model.emailController),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  MyTextField(
-                    hintText: 'First Name ',
-                    obscureText: false,
-                    controller: model.firstNameController,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  MyTextField(
-                      hintText: 'Password',
-                      obscureText: true,
-                      controller: model.passwordController),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  MyTextField(
-                    hintText: 'Confirm Password',
-                    obscureText: true,
-                    controller: model.confirmPasswordController,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        'Forgot Password?',
-                        style: TextStyle(
-                            color: colorText, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(
-                        height: 25,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  MyButton(
-                    text: 'Register',
-                    onPressed: () {
-                      model.registerUser(context);
-                    },
-                  ),
-                  const SizedBox(
-                    height: 25,
-                  ),
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                    Text(
-                      "Already have an account?",
-                      style: TextStyle(color: colorText, fontSize: 16),
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    GestureDetector(
-                      onTap: widget.onTap,
-                      child: Text(
-                        "Login Here",
-                        style: TextStyle(
-                            color: colorAccent,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16),
-                      ),
-                    )
-                  ]),
-                ],
+        body: Stack(
+          children: [
+            // Background image
+            Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/wager_background.jpg'),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-          ),
+
+            // Dark overlay
+            Container(
+              color: Colors.black.withOpacity(0.55),
+            ),
+
+            // Content
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 28.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      // Logo
+                      Image.asset(
+                        'assets/user.png',
+                        height: 120,
+                        color: Colors.white.withOpacity(0.9),
+                      ),
+
+                      const SizedBox(height: 20),
+
+                      // Title
+                      Text(
+                        'Create Account',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 30,
+                          letterSpacing: 1,
+                        ),
+                      ),
+
+                      const SizedBox(height: 6),
+
+                      // Subtitle
+                      const Text(
+                        'Fill in your details to get started.',
+                        style: TextStyle(
+                          color: Colors.white70,
+                          fontSize: 15,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+
+                      const SizedBox(height: 35),
+
+                      // Username
+                      MyTextField(
+                        hintText: 'Username',
+                        obscureText: false,
+                        controller: model.userNameController,
+                      ),
+                      const SizedBox(height: 14),
+
+                      // Email
+                      MyTextField(
+                        hintText: 'Email',
+                        obscureText: false,
+                        controller: model.emailController,
+                      ),
+                      const SizedBox(height: 14),
+
+                      // First Name
+                      MyTextField(
+                        hintText: 'First Name',
+                        obscureText: false,
+                        controller: model.firstNameController,
+                      ),
+                      const SizedBox(height: 14),
+
+                      // Password
+                      MyTextField(
+                        hintText: 'Password',
+                        obscureText: true,
+                        controller: model.passwordController,
+                      ),
+                      const SizedBox(height: 14),
+
+                      // Confirm Password
+                      MyTextField(
+                        hintText: 'Confirm Password',
+                        obscureText: true,
+                        controller: model.confirmPasswordController,
+                      ),
+
+                      const SizedBox(height: 28),
+
+                      // Register Button
+                      SizedBox(
+                        width: double.infinity,
+                        child: MyButton(
+                          text: 'Register',
+                          onPressed: () {
+                            model.registerUser(context);
+                          },
+                        ),
+                      ),
+
+                      const SizedBox(height: 25),
+
+                      // Login link
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "Already have an account?",
+                            style: TextStyle(
+                              color: Colors.white70,
+                              fontSize: 15,
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          GestureDetector(
+                            onTap: widget.onTap,
+                            child: Text(
+                              "Login Here",
+                              style: TextStyle(
+                                color: colorAccent,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+
+                      const SizedBox(height: 10),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
