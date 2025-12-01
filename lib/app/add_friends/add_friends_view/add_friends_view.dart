@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:wager_app/app/add_friends/add_friends_view_model/add_friends_view_model.dart';
 import 'package:wager_app/app/add_friends/widgets/exercise_search_field.dart';
+import 'package:wager_app/app/global_widgets/my_button.dart';
 import 'package:wager_app/styles/colors.dart';
 import 'package:wager_app/styles/dimensions.dart';
 
@@ -63,23 +64,13 @@ class AddFriendsView extends StatelessWidget {
                         hintText: 'Enter Username',
                         controller: model.userNameController),
                     spacingHeight16,
-                    GestureDetector(
-                      onTap: () {
-                        model.addFriend(context);
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 25, vertical: 12),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: colorAccent,
-                        ),
-                        child: Text(
-                          'Add Friend',
-                          style: TextStyle(color: colorText, fontSize: 16),
-                        ),
-                      ),
-                    ),
+                    MyButton(
+                        text: "Add Friend",
+                        isGlass: false,
+                        isGradient: true,
+                        onPressed: () {
+                          model.addFriend(context);
+                        }),
                     spacingHeight16,
                     Row(
                       children: [
