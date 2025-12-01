@@ -24,7 +24,6 @@ class HomeView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // --- Your top section stays the same ---
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -71,22 +70,7 @@ class HomeView extends StatelessWidget {
                     ),
                   ],
                 ),
-
-                const SizedBox(height: 10),
-
-                const ActionsWidget(),
-
-                const SizedBox(height: 20),
-
-                Text(
-                  "Friends",
-                  style: TextStyle(
-                    color: colorText,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 10),
+                spacingHeight16,
                 CircleAvatar(
                   radius: 35,
                   backgroundColor: Colors.blueAccent,
@@ -98,9 +82,7 @@ class HomeView extends StatelessWidget {
                     style: const TextStyle(color: Colors.white, fontSize: 24),
                   ),
                 ),
-
                 const SizedBox(height: 10),
-
                 Text(
                   "Active Bets",
                   style: TextStyle(
