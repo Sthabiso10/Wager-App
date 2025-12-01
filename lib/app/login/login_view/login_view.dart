@@ -34,7 +34,7 @@ class _LoginViewState extends State<LoginView> {
 
             // 🔥 Dark overlay to make the UI readable
             Container(
-              color: Colors.black.withOpacity(0.55),
+              color: Colors.black,
             ),
 
             // 🔥 Main content
@@ -48,13 +48,13 @@ class _LoginViewState extends State<LoginView> {
                       Image.asset(
                         'assets/user.png',
                         height: 120,
-                        color: Colors.white.withOpacity(0.9),
+                        color: Colors.white,
                       ),
 
                       const SizedBox(height: 20),
 
                       // Title
-                      Text(
+                      const Text(
                         'Login',
                         style: TextStyle(
                           color: Colors.white,
@@ -154,7 +154,7 @@ class _LoginViewState extends State<LoginView> {
                       const SizedBox(height: 25),
 
                       // Divider
-                      Divider(
+                      const Divider(
                         color: Colors.white24,
                         thickness: 1,
                       ),
