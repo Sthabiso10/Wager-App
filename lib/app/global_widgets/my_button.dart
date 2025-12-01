@@ -57,10 +57,10 @@ class MyButton extends StatelessWidget {
               blurRadius: 20,
               spreadRadius: 1,
             ),
-          BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+          const BoxShadow(
+            color: Colors.black,
             blurRadius: 8,
-            offset: const Offset(0, 4),
+            offset: Offset(0, 4),
           ),
         ],
       );
