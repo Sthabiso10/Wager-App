@@ -5,6 +5,7 @@ import 'package:stacked/stacked.dart';
 import 'package:wager_app/app/home/views/home_view.dart';
 import 'package:wager_app/app/navigation%20bar/view_models/navigation_view_model.dart';
 import 'package:wager_app/app/profie/views/profile_view.dart';
+import 'package:wager_app/app/wagers/wager_view/wager_view.dart';
 import 'package:wager_app/styles/colors.dart';
 
 class NavigationMenu extends StatelessWidget {
@@ -12,6 +13,7 @@ class NavigationMenu extends StatelessWidget {
 
   final List<Widget> _pages = [
     const HomeView(),
+    const WagerView(),
     const ProfileView(),
   ];
 
@@ -73,6 +75,21 @@ class NavigationMenu extends StatelessWidget {
                       'assets/user.png',
                       height: 24,
                       color: model.selectedIndex == 1
+                          ? Colors.white
+                          : Colors.white70,
+                    ),
+                    text: "Wagers",
+                    textStyle: GoogleFonts.poppins(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  GButton(
+                    icon: Icons.person_outlined,
+                    leading: Image.asset(
+                      'assets/user.png',
+                      height: 24,
+                      color: model.selectedIndex == 2
                           ? Colors.white
                           : Colors.white70,
                     ),
