@@ -124,6 +124,8 @@ class _RegisterViewState extends State<RegisterView> {
                       SizedBox(
                         width: double.infinity,
                         child: MyButton(
+                          isGlass: false,
+                          isGradient: true,
                           text: 'Register',
                           onPressed: () {
                             model.registerUser(context);
