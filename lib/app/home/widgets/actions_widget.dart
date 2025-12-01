@@ -15,15 +15,15 @@ class ActionsWidget extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.05), // semi-transparent
+            color: Colors.white, // semi-transparent
             borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: Colors.white.withOpacity(0.08), width: 1),
-            boxShadow: [
+            border: Border.all(color: Colors.white, width: 1),
+            boxShadow: const [
               BoxShadow(
-                color: Colors.black.withOpacity(0.25),
+                color: Colors.black,
                 blurRadius: 20,
                 spreadRadius: -5,
-                offset: const Offset(0, 10),
+                offset: Offset(0, 10),
               ),
             ],
           ),
@@ -64,7 +64,7 @@ class ActionsWidget extends StatelessWidget {
       height: 60,
       width: 1.2,
       margin: const EdgeInsets.symmetric(horizontal: 10),
-      color: Colors.white.withOpacity(0.12),
+      color: Colors.white,
     );
   }
 
@@ -81,10 +81,10 @@ class ActionsWidget extends StatelessWidget {
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: iconColor.withOpacity(0.15),
+            color: iconColor,
             boxShadow: [
               BoxShadow(
-                color: iconColor.withOpacity(0.4),
+                color: iconColor,
                 blurRadius: 15,
                 spreadRadius: 1,
               ),
@@ -103,9 +103,9 @@ class ActionsWidget extends StatelessWidget {
         ),
         Text(
           label,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 14,
-            color: Colors.white.withOpacity(0.7),
+            color: Colors.white,
             fontWeight: FontWeight.w400,
           ),
         ),
