@@ -26,11 +26,11 @@ class MyTextField extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: TextStyle(
-          color: colorText.withOpacity(0.6),
+          color: colorText,
           fontSize: 15,
         ),
         filled: true,
-        fillColor: colorText.withOpacity(0.08), // subtle background
+        fillColor: colorText, // subtle background
         contentPadding:
             const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
 
@@ -38,7 +38,7 @@ class MyTextField extends StatelessWidget {
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(
-            color: colorText.withOpacity(0.3),
+            color: colorText,
             width: 1.2,
           ),
         ),
