@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:wager_app/styles/colors.dart';
 
@@ -38,145 +39,171 @@ class NewBetCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 335,
-      margin: const EdgeInsets.only(right: 8),
       child: Stack(
+        clipBehavior: Clip.none,
         children: [
-          // Main Card
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: containerColor,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: const [
-                BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: 12,
-                  offset: Offset(0, 6),
-                ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 18), // spacing for badge
-
-                // Title
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: colorText,
+          // Glass card itself
+          ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: const Color.fromRGBO(26, 26, 26, 0.5), // glass
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: Colors.white.withOpacity(0.1),
+                    width: 1,
                   ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 6),
-
-                // Description
-                Text(
-                  description,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: colorText,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 16),
-
-                // Use Expanded to push VS row to bottom
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      // Player 1
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          CircleAvatar(
-                            backgroundColor: Colors.blueAccent,
-                            child: Text(player1[0],
-                                style: const TextStyle(color: Colors.white)),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(player1,
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  color: colorText)),
-                        ],
-                      ),
-                      const Spacer(),
-
-                      // VS box
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: const Text(
-                          'VS',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black54,
-                          ),
-                        ),
-                      ),
-                      const Spacer(),
-
-                      // Player 2
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          CircleAvatar(
-                            backgroundColor: Colors.redAccent,
-                            child: Text(player2[0],
-                                style: const TextStyle(color: Colors.white)),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(player2,
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  color: colorText)),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-
-                // Footer: Stake & Date
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Stake: $stake',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey[700],
-                        fontWeight: FontWeight.w500,
-                      ),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 24,
+                      offset: Offset(0, 4),
                     ),
-                    Text(
-                      date,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey[600],
-                      ),
+                    BoxShadow(
+                      color: Color.fromRGBO(255, 255, 255, 0.1),
+                      blurRadius: 1,
                     ),
                   ],
                 ),
-              ],
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 18), // spacing for badge
+
+                    // Title
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: colorText,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+
+                    const SizedBox(height: 6),
+
+                    // Description
+                    Text(
+                      description,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: colorText.withOpacity(0.85),
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    // Players row
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        // Player 1
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            CircleAvatar(
+                              backgroundColor: Colors.blueAccent,
+                              child: Text(
+                                player1[0].toUpperCase(),
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              player1,
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: colorText,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const Spacer(),
+
+                        // VS box
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: const Text(
+                            'VS',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white70,
+                            ),
+                          ),
+                        ),
+
+                        const Spacer(),
+
+                        // Player 2
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            CircleAvatar(
+                              backgroundColor: Colors.redAccent,
+                              child: Text(
+                                player2[0].toUpperCase(),
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              player2,
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: colorText,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 12),
+
+                    // Footer: Stake & Date
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Stake: $stake',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey[300],
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        Text(
+                          date,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey[400],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
 
-          // Status badge (floating top-right)
+          // Floating status badge
           Positioned(
             top: 8,
             right: 12,
