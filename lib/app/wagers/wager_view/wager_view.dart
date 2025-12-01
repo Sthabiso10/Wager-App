@@ -39,7 +39,7 @@ class WagerView extends StatelessWidget {
                     Text(
                       'Track all your challenges and bets.',
                       style: TextStyle(
-                        color: colorText.withOpacity(0.7),
+                        color: colorText,
                         fontSize: 16,
                       ),
                     ),
