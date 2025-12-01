@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stacked/stacked.dart';
 import 'package:wager_app/app/home/view_models/home_viewmodel.dart';
-import 'package:wager_app/app/home/widgets/actions_widget.dart';
 import 'package:wager_app/app/home/widgets/active_bets_widget.dart';
 import 'package:wager_app/styles/colors.dart';
 import 'package:wager_app/styles/dimensions.dart';
@@ -20,7 +19,12 @@ class HomeView extends StatelessWidget {
       builder: (context, model, child) => Scaffold(
           backgroundColor: backgroundColor,
           body: SafeArea(
-            minimum: const EdgeInsets.all(16),
+            top: true,
+            right: true,
+            left: true,
+            bottom: true,
+            minimum:
+                const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
