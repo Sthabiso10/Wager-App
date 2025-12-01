@@ -114,6 +114,8 @@ class _LoginViewState extends State<LoginView> {
                       SizedBox(
                         width: double.infinity,
                         child: MyButton(
+                          isGradient: true,
+                          isGlass: false,
                           text: 'Login',
                           onPressed: () {
                             model.login(context);
