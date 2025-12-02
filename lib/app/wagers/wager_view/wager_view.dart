@@ -62,12 +62,12 @@ class WagerView extends StatelessWidget {
                           // TabBar
                           Container(
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: Colors.black,
                               borderRadius: BorderRadius.circular(16),
                             ),
                             child: TabBar(
                               indicator: BoxDecoration(
-                                color: Colors.white,
+                                color: backgroundColor,
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               labelColor: Colors.white,
