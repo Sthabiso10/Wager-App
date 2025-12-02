@@ -43,7 +43,7 @@ class NavigationMenu extends StatelessWidget {
                 gap: 10,
                 activeColor: Colors.white,
                 iconSize: 26,
-                tabBackgroundColor: Colors.white.withOpacity(0.08),
+                tabBackgroundColor: Colors.white,
                 tabActiveBorder: Border.all(
                   color: Colors.white,
                   width: 1,
