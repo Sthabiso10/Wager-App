@@ -55,7 +55,7 @@ class NewBetCard extends StatelessWidget {
                   color: const Color.fromRGBO(26, 26, 26, 0.5), // glass
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                    color: Colors.white.withOpacity(0.1),
+                    color: Colors.white,
                     width: 1,
                   ),
                   boxShadow: const [
@@ -94,7 +94,7 @@ class NewBetCard extends StatelessWidget {
                       description,
                       style: TextStyle(
                         fontSize: 14,
-                        color: colorText.withOpacity(0.85),
+                        color: colorText,
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
@@ -135,7 +135,7 @@ class NewBetCard extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 12, vertical: 6),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.1),
+                            color: Colors.white,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: const Text(
