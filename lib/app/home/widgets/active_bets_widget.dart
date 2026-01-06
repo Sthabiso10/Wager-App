@@ -7,6 +7,17 @@ class ActiveBetsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
+      // CRITICAL: Allow the list to scroll behind the nav pill
+      physics: const BouncingScrollPhysics(),
+
+      // CRITICAL: No bottom padding - let items scroll below
+      padding: const EdgeInsets.only(
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0, // This was probably set to something
+      ),
+
       children: const [
         NewBetCard(
           title: "# Lakers will win the championship",
@@ -37,6 +48,9 @@ class ActiveBetsWidget extends StatelessWidget {
           status: "Pending",
           date: "15/06/2025",
         ),
+
+        // Add some extra space at the bottom so last item isn't hidden
+        SizedBox(height: 100), // This gives breathing room above nav pill
       ],
     );
   }
