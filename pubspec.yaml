@@ -52,6 +52,7 @@ dependencies:
   image_picker: ^1.2.1
   permission_handler: ^12.0.1
   flutter_speed_dial: ^7.0.0
+  convex_flutter: ^3.0.1
 
 
 dev_dependencies:
@@ -64,6 +65,18 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  flutter_launcher_icons: ^0.14.1
+
+# App launcher icon generation (run: dart run flutter_launcher_icons)
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/watt_logo.png"
+  remove_alpha_ios: true
+  background_color_ios: "#000000"
+  adaptive_icon_background: "#000000"
+  adaptive_icon_foreground: "assets/watt_logo.png"
+  min_sdk_android: 21
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

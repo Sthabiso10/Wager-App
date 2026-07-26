@@ -1,1 +1,1 @@
-String appName = "Smart Irigation!";
+String appName = "Watt";

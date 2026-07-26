@@ -1,138 +1,51 @@
 import 'package:flutter/material.dart';
+import 'package:wager_app/app/global_widgets/app_feedback.dart';
 import 'package:wager_app/styles/colors.dart';
 import 'package:wager_app/styles/dimensions.dart';
+import 'package:wager_app/styles/text_styles.dart';
 
 enum MessageType { success, failure }
 
+/// Shows a modern, non-blocking toast. Kept with its original signature so all
+/// existing call sites keep working — it now renders the new [AppToast] instead
+/// of a blocking image dialog.
 void displayMessageToUser({
   required String message,
   required BuildContext context,
-  required MessageType type, // Use an enum to specify the message type
+  required MessageType type,
 }) {
-  // Map message types to corresponding images
-  final Map<MessageType, String> imagePaths = {
-    MessageType.success: 'assets/success.png',
-    MessageType.failure: 'assets/failure.png',
-  };
-
-  // Retrieve the image path based on the type
-  String imagePath = imagePaths[type]!;
-
-  // Determine the color of the strip based on the message type
-  Color stripColor = type == MessageType.success ? colorAccent : Colors.red;
-
-  showDialog(
-    context: context,
-    builder: (context) => AlertDialog(
-      backgroundColor: containerColor,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10), // Rounded corners
-      ),
-      contentPadding: EdgeInsets.zero, // Remove default padding
-      content: Column(
-        mainAxisSize: MainAxisSize.min, // Prevent dialog stretching
-        children: [
-          // Add a color strip at the top
-          Container(
-            height: 8, // Height of the color strip
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: stripColor, // Use the determined color
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(10),
-                topRight: Radius.circular(10),
-              ),
-            ),
-          ),
-          Padding(
-            padding:
-                const EdgeInsets.all(16.0), // Add padding for dialog content
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Image.asset(imagePath), // Use the image path from the map
-                spacingHeight16,
-                Text(
-                  message,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 16,
-                      color: colorText,
-                      fontWeight: FontWeight.bold),
-                ),
-                spacingHeight16,
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: backgroundColor,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 25.0, vertical: 17),
-                      child: Center(
-                        child: Text(
-                          'Close',
-                          style: TextStyle(color: colorText, fontSize: 18),
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ],
-      ),
-    ),
+  AppToast.show(
+    context,
+    message: message,
+    kind: type == MessageType.success ? ToastKind.success : ToastKind.error,
   );
 }
 
+/// A clean floating snackbar (kept for callers that use it directly).
 void newEventSnackBar(
     String message, BuildContext context, Color containerColor) {
-  final scaffoldMessenger = ScaffoldMessenger.of(context);
-  scaffoldMessenger.showSnackBar(
+  ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
-      backgroundColor: containerColor, // Use the provided color
+      backgroundColor: AppColors.ink,
       behavior: SnackBarBehavior.floating,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10), // Rounded corners
-      ),
-      padding: const EdgeInsets.all(0), // Remove default padding
-      content: Container(
-        height: 60, // Customize height
-        alignment: Alignment.center,
-        child: Text(
-          message,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
-          textAlign: TextAlign.center, // Center align the text
-        ),
+      shape: RoundedRectangleBorder(borderRadius: AppRadius.rMd),
+      content: Text(
+        message,
+        style: AppText.body.copyWith(color: AppColors.onInk),
+        textAlign: TextAlign.center,
       ),
     ),
   );
 }
 
+/// A pill-style dialog button used by the legacy dialogs.
 Widget buildDialogButton({required String text, required Color color}) {
+  final onColor =
+      color == AppColors.surfaceMuted ? AppColors.textPrimary : Colors.white;
   return Container(
-    decoration: BoxDecoration(
-      color: color,
-      borderRadius: BorderRadius.circular(12),
-    ),
-    child: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 17),
-      child: Center(
-        child: Text(
-          text,
-          style: TextStyle(color: colorText, fontSize: 18),
-        ),
-      ),
-    ),
+    height: 50,
+    alignment: Alignment.center,
+    decoration: BoxDecoration(color: color, borderRadius: AppRadius.rMd),
+    child: Text(text, style: AppText.label.copyWith(color: onColor)),
   );
 }

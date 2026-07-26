@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
+import 'package:wager_app/app/global_widgets/animations.dart';
+import 'package:wager_app/app/global_widgets/app_components.dart';
 import 'package:wager_app/app/home/widgets/bet_container.dart';
 import 'package:wager_app/app/wagers/wagers_view_model/wager_view_model.dart';
 import 'package:wager_app/styles/colors.dart';
+import 'package:wager_app/styles/dimensions.dart';
+import 'package:wager_app/styles/text_styles.dart';
 
 class WagerView extends StatelessWidget {
   const WagerView({super.key});
@@ -14,163 +18,94 @@ class WagerView extends StatelessWidget {
       onViewModelReady: (model) => model.loadWagers(),
       builder: (context, model, child) => Scaffold(
         extendBody: true,
-        backgroundColor: const Color(0xFF0A0A0A),
+        backgroundColor: AppColors.background,
         body: SafeArea(
           bottom: false,
           child: Column(
             children: [
-              // Header
               _buildHeader(context, model),
-
-              // Stats Cards
               _buildStatsSection(model),
-
-              // Filter Chips
               _buildFilterSection(model),
-
-              // Search Bar
               _buildSearchBar(model),
-
-              // Wagers List
-              Expanded(
-                child: _buildWagersList(context, model),
-              ),
+              const SizedBox(height: AppSpacing.md),
+              Expanded(child: _buildWagersList(context, model)),
             ],
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.pushNamed(context, '/create-wager');
-          },
-          backgroundColor: const Color(0xFF6A11CB),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.only(bottom: 78),
+          child: FloatingActionButton(
+            onPressed: () => Navigator.pushNamed(context, '/create-wager'),
+            backgroundColor: AppColors.ink,
+            foregroundColor: AppColors.onInk,
+            elevation: 2,
+            shape: const CircleBorder(),
+            child: const Icon(Icons.add_rounded),
           ),
-          child: const Icon(Icons.add, color: Colors.white),
         ),
       ),
     );
   }
 
   Widget _buildHeader(BuildContext context, WagerViewModel model) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-      decoration: BoxDecoration(
-        color: const Color(0xFF1A1A1A),
-        border: Border(
-          bottom: BorderSide(
-            color: const Color(0xFF2A2A2A),
-            width: 1,
-          ),
-        ),
-      ),
-      child: Column(
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(AppSpacing.screen, AppSpacing.md,
+          AppSpacing.screen, AppSpacing.lg),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'My Wagers',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              IconButton(
-                onPressed: () {
-                  // Handle settings or menu
-                },
-                icon: const Icon(Icons.more_vert, color: Colors.white),
-              ),
+              Text('My wagers', style: AppText.display),
+              const SizedBox(height: 2),
+              Text('${model.totalCount} total wagers',
+                  style: AppText.bodyMuted),
             ],
           ),
-          const SizedBox(height: 8),
-          Text(
-            '${model.totalCount} total wagers',
-            style: TextStyle(
-              color: Colors.white.withOpacity(0.6),
-              fontSize: 14,
-            ),
-          ),
+          IconPillButton(icon: Icons.tune_rounded, onTap: () {}),
         ],
       ),
     );
   }
 
   Widget _buildStatsSection(WagerViewModel model) {
-    return Container(
-      padding: const EdgeInsets.all(20),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.screen),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _buildStatCard(
-            title: 'Total Value',
-            value: '\$${model.totalStake}',
-            color: const Color(0xFF6A11CB),
-            icon: Icons.account_balance_wallet,
-          ),
-          _buildStatCard(
-            title: 'Win Rate',
-            value: '${model.winRate}%',
-            color: const Color(0xFF66BB6A),
-            icon: Icons.trending_up,
-          ),
-          _buildStatCard(
-            title: 'Active',
-            value: model.activeCount.toString(),
-            color: const Color(0xFF42A5F5),
-            icon: Icons.timer,
-          ),
+          _statCard('Total value', '\$${model.totalStake}',
+              Icons.account_balance_wallet_outlined, 0),
+          const SizedBox(width: AppSpacing.md),
+          _statCard(
+              'Win rate', '${model.winRate}%', Icons.trending_up_rounded, 2),
+          const SizedBox(width: AppSpacing.md),
+          _statCard('Active', model.activeCount.toString(),
+              Icons.bolt_outlined, 1),
         ],
       ),
     );
   }
 
-  Widget _buildStatCard({
-    required String title,
-    required String value,
-    required Color color,
-    required IconData icon,
-  }) {
+  Widget _statCard(String title, String value, IconData icon, int chipIndex) {
+    final chip = AppColors.chipForIndex(chipIndex);
     return Expanded(
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 4),
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: const Color(0xFF1A1A1A),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: const Color(0xFF2A2A2A),
-            width: 1,
-          ),
-        ),
+      child: AppCard(
+        padding: const EdgeInsets.all(AppSpacing.md),
+        radius: AppRadius.lg,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(
-              icon,
-              color: color,
-              size: 24,
-            ),
-            const SizedBox(height: 12),
-            Text(
-              value,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              title,
-              style: TextStyle(
-                color: Colors.white.withOpacity(0.6),
-                fontSize: 12,
-              ),
-            ),
+            PastelIconBadge(
+                icon: icon,
+                background: chip[0],
+                foreground: chip[1],
+                size: 34),
+            const SizedBox(height: AppSpacing.md),
+            Text(value, style: AppText.h2.copyWith(fontSize: 19)),
+            const SizedBox(height: 2),
+            Text(title, style: AppText.caption, maxLines: 1),
           ],
         ),
       ),
@@ -178,100 +113,58 @@ class WagerView extends StatelessWidget {
   }
 
   Widget _buildFilterSection(WagerViewModel model) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            _buildFilterChip(
-              model: model,
-              label: 'All',
-              filter: 'all',
-              count: model.totalCount,
-              isSelected: model.selectedFilter == 'all',
-            ),
-            const SizedBox(width: 8),
-            _buildFilterChip(
-              model: model,
-              label: 'Active',
-              filter: 'active',
-              count: model.activeCount,
-              isSelected: model.selectedFilter == 'active',
-            ),
-            const SizedBox(width: 8),
-            _buildFilterChip(
-              model: model,
-              label: 'Pending',
-              filter: 'pending',
-              count: model.pendingCount,
-              isSelected: model.selectedFilter == 'pending',
-            ),
-            const SizedBox(width: 8),
-            _buildFilterChip(
-              model: model,
-              label: 'Completed',
-              filter: 'done',
-              count: model.doneCount,
-              isSelected: model.selectedFilter == 'done',
-            ),
-          ],
+    final filters = [
+      ('All', 'all', model.totalCount),
+      ('Active', 'active', model.activeCount),
+      ('Pending', 'pending', model.pendingCount),
+      ('Completed', 'done', model.doneCount),
+    ];
+    return Padding(
+      padding: const EdgeInsets.only(top: AppSpacing.xl),
+      child: SizedBox(
+        height: 38,
+        child: ListView.separated(
+          scrollDirection: Axis.horizontal,
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.screen),
+          itemCount: filters.length,
+          separatorBuilder: (_, __) => const SizedBox(width: AppSpacing.sm),
+          itemBuilder: (context, i) {
+            final (label, filter, count) = filters[i];
+            return _filterChip(model, label, filter, count,
+                model.selectedFilter == filter);
+          },
         ),
       ),
     );
   }
 
-  Widget _buildFilterChip({
-    required WagerViewModel model,
-    required String label,
-    required String filter,
-    required int count,
-    required bool isSelected,
-  }) {
-    return GestureDetector(
+  Widget _filterChip(WagerViewModel model, String label, String filter,
+      int count, bool isSelected) {
+    return PressableScale(
       onTap: () => model.setFilter(filter),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        padding:
+            const EdgeInsets.symmetric(horizontal: AppSpacing.lg, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF6A11CB) : const Color(0xFF1A1A1A),
-          borderRadius: BorderRadius.circular(20),
+          color: isSelected ? AppColors.ink : AppColors.surface,
+          borderRadius: BorderRadius.circular(AppRadius.pill),
           border: Border.all(
-            color: isSelected ? Colors.transparent : const Color(0xFF2A2A2A),
-            width: 1,
-          ),
+              color: isSelected ? AppColors.ink : AppColors.border),
         ),
         child: Row(
           children: [
-            Text(
-              label,
-              style: TextStyle(
-                color:
-                    isSelected ? Colors.white : Colors.white.withOpacity(0.8),
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
+            Text(label,
+                style: AppText.label.copyWith(
+                    color: isSelected
+                        ? AppColors.onInk
+                        : AppColors.textSecondary)),
             if (count > 0) ...[
               const SizedBox(width: 6),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                decoration: BoxDecoration(
-                  color: isSelected
-                      ? Colors.white.withOpacity(0.2)
-                      : Colors.black.withOpacity(0.4),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  count.toString(),
-                  style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                    color: isSelected
-                        ? Colors.white
-                        : Colors.white.withOpacity(0.7),
-                  ),
-                ),
-              ),
+              Text('$count',
+                  style: AppText.caption.copyWith(
+                      color: isSelected
+                          ? Colors.white.withValues(alpha: 0.7)
+                          : AppColors.textTertiary)),
             ],
           ],
         ),
@@ -280,50 +173,44 @@ class WagerView extends StatelessWidget {
   }
 
   Widget _buildSearchBar(WagerViewModel model) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(AppSpacing.screen, AppSpacing.lg,
+          AppSpacing.screen, 0),
       child: Container(
         height: 50,
+        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
         decoration: BoxDecoration(
-          color: const Color(0xFF1A1A1A),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: const Color(0xFF2A2A2A),
-            width: 1,
-          ),
+          color: AppColors.surfaceMuted,
+          borderRadius: AppRadius.rMd,
         ),
         child: Row(
           children: [
-            const SizedBox(width: 16),
-            Icon(
-              Icons.search,
-              color: Colors.white.withOpacity(0.5),
-              size: 20,
-            ),
-            const SizedBox(width: 12),
+            const Icon(Icons.search_rounded,
+                color: AppColors.textSecondary, size: 20),
+            const SizedBox(width: AppSpacing.md),
             Expanded(
               child: TextField(
                 controller: model.searchController,
-                style: const TextStyle(color: Colors.white, fontSize: 14),
+                style: AppText.body,
+                cursorColor: AppColors.ink,
                 decoration: InputDecoration(
-                  hintText: 'Search wagers...',
-                  hintStyle: TextStyle(color: Colors.white.withOpacity(0.4)),
+                  isCollapsed: true,
+                  hintText: 'Search wagers…',
+                  hintStyle:
+                      AppText.body.copyWith(color: AppColors.textTertiary),
                   border: InputBorder.none,
                 ),
-                onChanged: (value) => model.setFilter(model.selectedFilter),
+                onChanged: (_) => model.setFilter(model.selectedFilter),
               ),
             ),
             if (model.searchController.text.isNotEmpty)
-              IconButton(
-                onPressed: () {
+              GestureDetector(
+                onTap: () {
                   model.searchController.clear();
                   model.setFilter(model.selectedFilter);
                 },
-                icon: Icon(
-                  Icons.close,
-                  color: Colors.white.withOpacity(0.5),
-                  size: 18,
-                ),
+                child: const Icon(Icons.close_rounded,
+                    color: AppColors.textSecondary, size: 18),
               ),
           ],
         ),
@@ -334,101 +221,66 @@ class WagerView extends StatelessWidget {
   Widget _buildWagersList(BuildContext context, WagerViewModel model) {
     if (model.isBusy) {
       return const Center(
-        child: CircularProgressIndicator(
-          color: Color(0xFF6A11CB),
-        ),
+        child: CircularProgressIndicator(color: AppColors.ink),
       );
     }
-
     if (model.filteredWagers.isEmpty) {
       return _buildEmptyState(context, model);
     }
-
-    return ListView(
+    return ListView.separated(
       physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      children: [
-        ...model.filteredWagers.map((wager) {
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 16),
-            child: NewBetCard(
-              title: wager.title,
-              description: wager.description,
-              player1: wager.player1,
-              player2: wager.player2,
-              stake: wager.stake,
-              status: wager.status,
-              date: wager.date,
-            ),
-          );
-        }).toList(),
-        const SizedBox(height: 100), // Breathing room at bottom
-      ],
+      padding: const EdgeInsets.fromLTRB(
+          AppSpacing.screen, AppSpacing.lg, AppSpacing.screen, 120),
+      itemCount: model.filteredWagers.length,
+      separatorBuilder: (_, __) => const SizedBox(height: 14),
+      itemBuilder: (context, i) {
+        final wager = model.filteredWagers[i];
+        return FadeSlideIn.staggered(
+          i,
+          step: const Duration(milliseconds: 80),
+          child: NewBetCard(
+            title: wager.title,
+            description: wager.description,
+            player1: wager.player1,
+            player2: wager.player2,
+            stake: wager.stake,
+            status: wager.status,
+            date: wager.date,
+          ),
+        );
+      },
     );
   }
 
   Widget _buildEmptyState(BuildContext context, WagerViewModel model) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(32),
+        padding: const EdgeInsets.all(AppSpacing.xxxl),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              width: 120,
-              height: 120,
-              decoration: BoxDecoration(
-                color: const Color(0xFF6A11CB).withOpacity(0.1),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                Icons.auto_graph,
-                color: const Color(0xFF6A11CB),
-                size: 48,
-              ),
+            PastelIconBadge(
+              icon: Icons.auto_graph_rounded,
+              background: AppColors.lavender,
+              foreground: AppColors.onLavender,
+              size: 88,
             ),
-            const SizedBox(height: 24),
-            const Text(
-              'No Wagers Found',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppSpacing.xxl),
+            Text('No wagers found', style: AppText.h1),
+            const SizedBox(height: AppSpacing.sm),
             Text(
               model.selectedFilter == 'all'
-                  ? 'Create your first wager to get started!'
-                  : 'No ${model.selectedFilter} wagers available',
-              style: TextStyle(
-                color: Colors.white.withOpacity(0.6),
-                fontSize: 14,
-              ),
+                  ? 'Create your first wager to get started.'
+                  : 'No ${model.selectedFilter} wagers right now.',
+              style: AppText.bodyMuted,
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/create-wager');
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF6A11CB),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 32,
-                  vertical: 14,
-                ),
-              ),
-              child: const Text(
-                'Create Wager',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
+            const SizedBox(height: AppSpacing.xxl),
+            SizedBox(
+              width: 200,
+              child: ElevatedButton(
+                onPressed: () => Navigator.pushNamed(context, '/create-wager'),
+                child: const Text('Create wager'),
               ),
             ),
           ],

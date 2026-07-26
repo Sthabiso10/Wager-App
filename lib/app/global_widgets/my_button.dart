@@ -1,118 +1,137 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:wager_app/styles/colors.dart';
+import 'package:wager_app/styles/dimensions.dart';
+import 'package:wager_app/styles/text_styles.dart';
 
-class MyButton extends StatelessWidget {
+/// Button style variants for the new design system.
+enum AppButtonVariant { primary, secondary, accent }
+
+/// Primary app button — a clean, full-width pill/rounded button with tactile
+/// press feedback and a loading state.
+///
+/// Backwards compatible with the previous API: the old `isGlass` / `isGradient`
+/// booleans still work and now map onto the new [AppButtonVariant]s
+/// (`isGlass` → secondary, `isGradient` → accent).
+class MyButton extends StatefulWidget {
   final String text;
   final VoidCallback onPressed;
+  final AppButtonVariant variant;
+  final IconData? icon;
+  final bool isLoading;
+  final bool fullWidth;
+
+  // --- Legacy flags (kept for compatibility) --------------------------------
   final bool isGlass;
   final bool isGradient;
-  final bool neonGlow;
+  final bool neonGlow; // no longer used; accepted so old callers compile.
 
   const MyButton({
     super.key,
     required this.text,
     required this.onPressed,
+    this.variant = AppButtonVariant.primary,
+    this.icon,
+    this.isLoading = false,
+    this.fullWidth = true,
     this.isGlass = false,
     this.isGradient = false,
     this.neonGlow = false,
   });
 
+  AppButtonVariant get _resolvedVariant {
+    if (isGlass) return AppButtonVariant.secondary;
+    if (isGradient) return AppButtonVariant.accent;
+    return variant;
+  }
+
+  @override
+  State<MyButton> createState() => _MyButtonState();
+}
+
+class _MyButtonState extends State<MyButton> {
+  bool _pressed = false;
+
+  void _setPressed(bool value) {
+    if (widget.isLoading) return;
+    setState(() => _pressed = value);
+  }
+
   @override
   Widget build(BuildContext context) {
-    BoxDecoration decoration;
+    final variant = widget._resolvedVariant;
 
-    final borderRadius = BorderRadius.circular(12);
+    late final Color bg;
+    late final Color fg;
+    Border? border;
 
-    if (isGlass) {
-      // Glass button using Color.fromRGBO instead of .withOpacity
-      decoration = BoxDecoration(
-        color: const Color.fromRGBO(255, 255, 255, 0.05),
-        borderRadius: borderRadius,
-        border: Border.all(
-          color: const Color.fromRGBO(255, 255, 255, 0.1),
-          width: 1,
-        ),
-        boxShadow: [
-          if (neonGlow)
-            const BoxShadow(
-              color: Color.fromRGBO(0, 217, 255, 0.4),
-              blurRadius: 20,
-              spreadRadius: 1,
-            ),
-        ],
-      );
-    } else if (isGradient) {
-      decoration = BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF02C697), Color(0xFF00FF00)], // primary → secondary
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: borderRadius,
-        boxShadow: [
-          if (neonGlow)
-            const BoxShadow(
-              color: Color.fromRGBO(0, 217, 255, 0.4),
-              blurRadius: 20,
-              spreadRadius: 1,
-            ),
-          const BoxShadow(
-            color: Colors.black,
-            blurRadius: 8,
-            offset: Offset(0, 4),
-          ),
-        ],
-      );
-    } else {
-      // Default solid button
-      decoration = BoxDecoration(
-        color: colorAccent,
-        borderRadius: borderRadius,
-        boxShadow: [
-          if (neonGlow)
-            const BoxShadow(
-              color: Color.fromRGBO(0, 217, 255, 0.4),
-              blurRadius: 20,
-              spreadRadius: 1,
-            ),
-        ],
-      );
+    switch (variant) {
+      case AppButtonVariant.primary:
+        bg = AppColors.ink;
+        fg = AppColors.onInk;
+        break;
+      case AppButtonVariant.accent:
+        bg = AppColors.accent;
+        fg = Colors.white;
+        break;
+      case AppButtonVariant.secondary:
+        bg = AppColors.surface;
+        fg = AppColors.textPrimary;
+        border = Border.all(color: AppColors.border);
+        break;
     }
 
-    return SizedBox(
-      width: double.infinity,
-      height: 56,
-      child: GestureDetector(
-        onTap: onPressed,
-        child: Container(
-          decoration: decoration,
-          child: ClipRRect(
-            borderRadius: borderRadius,
-            child: isGlass
-                ? BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
-                    child: Center(
-                      child: Text(
-                        text,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  )
-                : Center(
-                    child: Text(
-                      text,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
+    final content = widget.isLoading
+        ? SizedBox(
+            height: 22,
+            width: 22,
+            child: CircularProgressIndicator(
+              strokeWidth: 2.4,
+              valueColor: AlwaysStoppedAnimation<Color>(fg),
+            ),
+          )
+        : Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (widget.icon != null) ...[
+                Icon(widget.icon, size: 20, color: fg),
+                const SizedBox(width: 8),
+              ],
+              Text(widget.text, style: AppText.button.copyWith(color: fg)),
+            ],
+          );
+
+    return GestureDetector(
+      onTapDown: (_) => _setPressed(true),
+      onTapUp: (_) => _setPressed(false),
+      onTapCancel: () => _setPressed(false),
+      onTap: widget.isLoading
+          ? null
+          : () {
+              HapticFeedback.lightImpact();
+              widget.onPressed();
+            },
+      child: AnimatedScale(
+        scale: _pressed ? 0.97 : 1.0,
+        duration: const Duration(milliseconds: 120),
+        curve: Curves.easeOut,
+        child: AnimatedOpacity(
+          opacity: widget.isLoading ? 0.85 : 1.0,
+          duration: const Duration(milliseconds: 120),
+          child: Container(
+            width: widget.fullWidth ? double.infinity : null,
+            height: 54,
+            padding: widget.fullWidth
+                ? null
+                : const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: bg,
+              border: border,
+              borderRadius: AppRadius.rMd,
+            ),
+            child: content,
           ),
         ),
       ),

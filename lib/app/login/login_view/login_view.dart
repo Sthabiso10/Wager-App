@@ -4,6 +4,8 @@ import 'package:wager_app/app/global_widgets/my_button.dart';
 import 'package:wager_app/app/global_widgets/my_textfield.dart';
 import 'package:wager_app/app/login/view_models/login_view_model.dart';
 import 'package:wager_app/styles/colors.dart';
+import 'package:wager_app/styles/dimensions.dart';
+import 'package:wager_app/styles/text_styles.dart';
 
 class LoginView extends StatefulWidget {
   final void Function()? onTap;
@@ -19,170 +21,122 @@ class _LoginViewState extends State<LoginView> {
     return ViewModelBuilder<LoginViewModel>.reactive(
       viewModelBuilder: () => LoginViewModel(),
       builder: (context, model, child) => Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: Stack(
-          children: [
-            // 🔥 Background image
-            Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/wager_background.jpg'),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
+        backgroundColor: AppColors.background,
+        body: SafeArea(
+          child: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.xxl, vertical: AppSpacing.xxl),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const _BrandMark(),
+                  const SizedBox(height: AppSpacing.xxl),
+                  Text('Welcome back', style: AppText.display),
+                  const SizedBox(height: 6),
+                  Text('Sign in to pick up where you left off.',
+                      style: AppText.bodyMuted),
+                  const SizedBox(height: AppSpacing.xxxl),
 
-            // 🔥 Dark overlay to make the UI readable
-            Container(
-              color: Colors.black,
-            ),
+                  MyTextField(
+                    label: 'Email',
+                    hintText: 'you@example.com',
+                    obscureText: false,
+                    icon: Icons.mail_outline_rounded,
+                    keyboardType: TextInputType.emailAddress,
+                    controller: model.emailController,
+                  ),
+                  const SizedBox(height: AppSpacing.lg),
+                  MyTextField(
+                    label: 'Password',
+                    hintText: 'Enter your password',
+                    obscureText: true,
+                    icon: Icons.lock_outline_rounded,
+                    controller: model.passwordController,
+                  ),
+                  const SizedBox(height: AppSpacing.md),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () {},
+                      child: Text('Forgot password?',
+                          style: AppText.label
+                              .copyWith(color: AppColors.accentText)),
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.lg),
 
-            // 🔥 Main content
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 28.0),
-                child: SingleChildScrollView(
-                  child: Column(
+                  MyButton(
+                    text: 'Sign in',
+                    isLoading: model.isBusy,
+                    onPressed: () => model.login(context),
+                  ),
+                  const SizedBox(height: AppSpacing.xxl),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // Logo
-                      Image.asset(
-                        'assets/user.png',
-                        height: 120,
-                        color: Colors.white,
-                      ),
-
-                      const SizedBox(height: 20),
-
-                      // Title
-                      const Text(
-                        'Login',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 32,
-                          letterSpacing: 1,
-                        ),
-                      ),
-
-                      const SizedBox(height: 6),
-
-                      // Subtitle
-                      const Text(
-                        'Enter your email and password to continue.',
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 15,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-
-                      const SizedBox(height: 35),
-
-                      // Email
-                      MyTextField(
-                        hintText: 'Email',
-                        obscureText: false,
-                        controller: model.emailController,
-                      ),
-
-                      const SizedBox(height: 14),
-
-                      // Password
-                      MyTextField(
-                        hintText: 'Password',
-                        obscureText: true,
-                        controller: model.passwordController,
-                      ),
-
-                      const SizedBox(height: 10),
-
-                      // Forgot password
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          'Forgot Password?',
-                          style: TextStyle(
-                            color: colorAccent,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-
-                      const SizedBox(height: 25),
-
-                      // Login button
-                      SizedBox(
-                        width: double.infinity,
-                        child: MyButton(
-                          isGradient: true,
-                          isGlass: false,
-                          text: 'Login',
-                          onPressed: () {
-                            model.login(context);
-                          },
-                        ),
-                      ),
-
-                      const SizedBox(height: 22),
-
-                      // Register
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            "Don't have an account?",
-                            style: TextStyle(
-                              color: Colors.white70,
-                              fontSize: 15,
-                            ),
-                          ),
-                          const SizedBox(width: 6),
-                          GestureDetector(
-                            onTap: widget.onTap,
-                            child: Text(
-                              "Register Here",
-                              style: TextStyle(
-                                color: colorAccent,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-
-                      const SizedBox(height: 25),
-
-                      // Divider
-                      const Divider(
-                        color: Colors.white24,
-                        thickness: 1,
-                      ),
-
-                      const SizedBox(height: 12),
-
-                      const Text(
-                        'By continuing you agree to our Terms of Use\nand Privacy Policy.',
-                        style: TextStyle(
-                          color: Colors.white54,
-                          fontSize: 13,
-                        ),
-                        textAlign: TextAlign.center,
+                      Text("Don't have an account?", style: AppText.bodyMuted),
+                      const SizedBox(width: 6),
+                      GestureDetector(
+                        onTap: widget.onTap,
+                        child: Text('Register',
+                            style: AppText.label
+                                .copyWith(color: AppColors.accentText)),
                       ),
                     ],
                   ),
-                ),
+                  const SizedBox(height: AppSpacing.xl),
+                  Text(
+                    'By continuing you agree to our Terms of Use\nand Privacy Policy.',
+                    style: AppText.caption.copyWith(color: AppColors.textTertiary),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
               ),
             ),
-
-            // 🔥 Loading overlay
-            if (model.isBusy) ...[
-              const ModalBarrier(dismissible: false, color: Colors.black38),
-              const Center(child: CircularProgressIndicator()),
-            ]
-          ],
+          ),
         ),
       ),
+    );
+  }
+}
+
+/// The Watt logo lockup — the brand mark on a dark "app-icon" tile (the logo
+/// artwork is black-backed, so the ink tile lets it read cleanly on the light
+/// canvas).
+class _BrandMark extends StatelessWidget {
+  const _BrandMark();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          width: 84,
+          height: 84,
+          decoration: BoxDecoration(
+            color: AppColors.ink,
+            borderRadius: BorderRadius.circular(AppRadius.xl),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.ink.withValues(alpha: 0.28),
+                blurRadius: 24,
+                offset: const Offset(0, 12),
+              ),
+            ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(6),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(AppRadius.lg),
+              child: Image.asset('assets/watt_logo.png', fit: BoxFit.cover),
+            ),
+          ),
+        ),
+        const SizedBox(height: AppSpacing.md),
+        Text('Watt', style: AppText.h3.copyWith(letterSpacing: 0.2)),
+      ],
     );
   }
 }

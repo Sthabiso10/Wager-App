@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
+import 'package:wager_app/app/global_widgets/animations.dart';
+import 'package:wager_app/app/global_widgets/app_components.dart';
+import 'package:wager_app/app/global_widgets/app_feedback.dart';
 import 'package:wager_app/app/profie/view_model/profile_viewmodel.dart';
-import 'package:wager_app/app/profie/widgets/settings_tile.dart';
 import 'package:wager_app/styles/colors.dart';
+import 'package:wager_app/styles/dimensions.dart';
+import 'package:wager_app/styles/text_styles.dart';
 
 class SettingsView extends StatelessWidget {
   const SettingsView({super.key});
@@ -10,118 +14,137 @@ class SettingsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<ProfileViewModel>.reactive(
-        viewModelBuilder: () => ProfileViewModel(),
-        onViewModelReady: (model) {
-          model.loadUserData();
-        },
-        builder: (context, model, chid) => Scaffold(
-              backgroundColor: backgroundColor,
-              appBar: AppBar(
-                title: Text(
-                  'Settings',
-                  style: TextStyle(color: colorText),
-                ),
-                leading: IconButton(
-                  icon:
-                      Icon(Icons.arrow_back_ios_new_rounded, color: colorText),
-                  onPressed: () => Navigator.pop(context),
-                ),
-                backgroundColor: backgroundColor,
-                elevation: 0,
-              ),
-              extendBodyBehindAppBar: false,
-              body: Column(
-                children: [
-                  // User info header (compact, non-overlapping)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                    child: Card(
-                      color: containerColor,
-                      elevation: 2,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16)),
-                      child: ListTile(
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 8, horizontal: 16),
-                        leading: CircleAvatar(
-                          radius: 24,
-                          backgroundColor: colorAccent,
-                          child: const Icon(Icons.person,
-                              size: 28, color: Colors.white),
+      viewModelBuilder: () => ProfileViewModel(),
+      onViewModelReady: (model) => model.loadUserData(),
+      builder: (context, model, child) => Scaffold(
+        backgroundColor: AppColors.background,
+        appBar: AppBar(
+          title: const Text('Settings'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_rounded),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ),
+        body: SafeArea(
+          top: false,
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            padding: const EdgeInsets.fromLTRB(AppSpacing.screen, AppSpacing.sm,
+                AppSpacing.screen, AppSpacing.xxxl),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Account card
+                FadeSlideIn(
+                  child: AppCard(
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 52,
+                          height: 52,
+                          alignment: Alignment.center,
+                          decoration: const BoxDecoration(
+                            color: AppColors.lavender,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Text(
+                            _initial(model),
+                            style: AppText.h1.copyWith(
+                                color: AppColors.onLavender, fontSize: 22),
+                          ),
                         ),
-                        title: Text(model.userData?["username"] ?? "loading...",
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: colorText)),
-                        subtitle: Text(model.userData?["email"] ?? "loading...",
-                            style: TextStyle(fontSize: 13, color: colorText)),
-                      ),
+                        const SizedBox(width: AppSpacing.md),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(model.userData?["username"] ?? 'loading…',
+                                  style: AppText.h3),
+                              Text(model.userData?["email"] ?? 'loading…',
+                                  style: AppText.caption, maxLines: 1),
+                            ],
+                          ),
+                        ),
+                        const AppBadge.soft('Pro'),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 18),
-                  // Animated settings list
-                  Expanded(
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 500),
-                      curve: Curves.easeOutCubic,
-                      margin: const EdgeInsets.symmetric(horizontal: 18),
-                      decoration: BoxDecoration(
-                        color: containerColor,
-                        borderRadius: BorderRadius.circular(24),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.blue.shade100.withAlpha(46),
-                            blurRadius: 18,
-                            offset: const Offset(0, 8),
-                          ),
-                        ],
+                ),
+                const SizedBox(height: AppSpacing.xxl),
+
+                FadeSlideIn(
+                  delay: const Duration(milliseconds: 80),
+                  child: MenuGroup(
+                    label: 'PREFERENCES',
+                    tiles: [
+                      MenuTile(
+                        icon: Icons.notifications_none_rounded,
+                        title: 'Notifications',
+                        chipIndex: 0,
+                        onTap: () {},
                       ),
-                      child: ListView(
-                        padding: const EdgeInsets.all(16),
-                        children: [
-                          SettingsTile(
-                            icon: Icons.notifications,
-                            title: 'Notifications',
-                            onTap: () {},
-                          ),
-                          const SizedBox(height: 8),
-                          SettingsTile(
-                            icon: Icons.lock,
-                            title: 'Privacy',
-                            onTap: () {},
-                          ),
-                          const SizedBox(height: 8),
-                          SettingsTile(
-                            icon: Icons.color_lens,
-                            title: 'Theme',
-                            onTap: () {},
-                          ),
-                          const SizedBox(height: 8),
-                          SettingsTile(
-                            icon: Icons.info,
-                            title: 'About',
-                            onTap: () {},
-                          ),
-                          const SizedBox(height: 8),
-                          const Divider(),
-                          SettingsTile(
-                            icon: Icons.logout,
-                            title: 'Logout',
-                            onTap: () {
-                              if (!context.mounted) return;
-                              model.logout(context);
-                            },
-                            trailing:
-                                const Icon(Icons.arrow_forward_ios, size: 16),
-                          ),
-                        ],
+                      MenuTile(
+                        icon: Icons.lock_outline_rounded,
+                        title: 'Privacy',
+                        chipIndex: 1,
+                        onTap: () {},
                       ),
-                    ),
+                      MenuTile(
+                        icon: Icons.palette_outlined,
+                        title: 'Theme',
+                        subtitle: 'Light',
+                        chipIndex: 2,
+                        onTap: () {},
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 24),
-                ],
-              ),
-            ));
+                ),
+                const SizedBox(height: AppSpacing.lg),
+
+                FadeSlideIn(
+                  delay: const Duration(milliseconds: 140),
+                  child: MenuGroup(
+                    label: 'ABOUT',
+                    tiles: [
+                      MenuTile(
+                        icon: Icons.info_outline_rounded,
+                        title: 'About Wager',
+                        chipIndex: 3,
+                        onTap: () {},
+                      ),
+                      MenuTile(
+                        icon: Icons.logout_rounded,
+                        title: 'Log out',
+                        chipIndex: 4,
+                        destructive: true,
+                        trailing: const SizedBox.shrink(),
+                        onTap: () async {
+                          final ok = await showAppConfirmDialog(
+                            context,
+                            icon: Icons.logout_rounded,
+                            title: 'Log out?',
+                            message:
+                                'You’ll need to sign in again to place wagers.',
+                            confirmLabel: 'Log out',
+                            destructive: true,
+                          );
+                          if (!context.mounted) return;
+                          if (ok == true) model.logout(context);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  String _initial(ProfileViewModel model) {
+    final name = (model.userData?["username"] as String?) ?? '';
+    return name.isNotEmpty ? name[0].toUpperCase() : '?';
   }
 }

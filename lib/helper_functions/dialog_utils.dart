@@ -1,73 +1,107 @@
 import 'package:flutter/material.dart';
+import 'package:wager_app/app/global_widgets/app_feedback.dart';
 import 'package:wager_app/styles/colors.dart';
+import 'package:wager_app/styles/dimensions.dart';
+import 'package:wager_app/styles/text_styles.dart';
 
+/// A polished input dialog for naming something (e.g. a template), matching the
+/// app's design system with a springy entrance.
 Future<void> showTemplateNameDialog(
     BuildContext context, Function(String) onSave) async {
-  final TextEditingController templateNameController = TextEditingController();
+  final controller = TextEditingController();
+  final reduceMotion = MediaQuery.maybeOf(context)?.disableAnimations ?? false;
 
-  await showDialog(
+  await showGeneralDialog(
     context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        backgroundColor: containerColor,
-        title: Text('Template Name', style: TextStyle(color: colorText)),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: buildDialogButton(
-                        text: 'Cancel', color: backgroundColor),
+    barrierDismissible: true,
+    barrierLabel: 'Template name',
+    barrierColor: AppColors.ink.withValues(alpha: 0.45),
+    transitionDuration:
+        reduceMotion ? Duration.zero : const Duration(milliseconds: 260),
+    pageBuilder: (context, _, __) => const SizedBox.shrink(),
+    transitionBuilder: (context, anim, _, __) {
+      final curved = CurvedAnimation(parent: anim, curve: Curves.easeOutBack);
+      return Opacity(
+        opacity: anim.value.clamp(0.0, 1.0),
+        child: Transform.scale(
+          scale: reduceMotion ? 1.0 : (0.92 + 0.08 * curved.value),
+          child: Dialog(
+            backgroundColor: AppColors.surface,
+            insetPadding:
+                const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
+            shape: RoundedRectangleBorder(borderRadius: AppRadius.rXl),
+            child: Padding(
+              padding: const EdgeInsets.all(AppSpacing.xxl),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Template name', style: AppText.h2),
+                  const SizedBox(height: AppSpacing.sm),
+                  Text('Give this template a name so you can reuse it later.',
+                      style: AppText.bodyMuted),
+                  const SizedBox(height: AppSpacing.lg),
+                  TextField(
+                    controller: controller,
+                    autofocus: true,
+                    cursorColor: AppColors.ink,
+                    style: AppText.body.copyWith(fontWeight: FontWeight.w500),
+                    decoration: const InputDecoration(hintText: 'e.g. Weekend bet'),
                   ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      final templateName = templateNameController.text;
-                      if (templateName.isNotEmpty) {
-                        Navigator.pop(context);
-                        onSave(templateName);
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content:
-                                Text('Please enter a name for the template.'),
-                          ),
-                        );
-                      }
-                    },
-                    child: buildDialogButton(text: 'Save', color: colorAccent),
+                  const SizedBox(height: AppSpacing.xxl),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _pill(
+                          label: 'Cancel',
+                          bg: AppColors.surfaceMuted,
+                          fg: AppColors.textPrimary,
+                          onTap: () => Navigator.pop(context),
+                        ),
+                      ),
+                      const SizedBox(width: AppSpacing.md),
+                      Expanded(
+                        child: _pill(
+                          label: 'Save',
+                          bg: AppColors.ink,
+                          fg: Colors.white,
+                          onTap: () {
+                            final name = controller.text.trim();
+                            if (name.isNotEmpty) {
+                              Navigator.pop(context);
+                              onSave(name);
+                            } else {
+                              AppToast.error(
+                                  context, 'Please enter a name first.');
+                            }
+                          },
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ],
+          ),
         ),
       );
     },
   );
 }
 
-// Button widget (stays in this file)
-Widget buildDialogButton({required String text, required Color color}) {
-  return Container(
-    decoration: BoxDecoration(
-      color: color,
-      borderRadius: BorderRadius.circular(12),
-    ),
-    child: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 17),
-      child: Center(
-        child: Text(
-          text,
-          style: TextStyle(color: colorText, fontSize: 18),
-        ),
-      ),
+Widget _pill({
+  required String label,
+  required Color bg,
+  required Color fg,
+  required VoidCallback onTap,
+}) {
+  return GestureDetector(
+    onTap: onTap,
+    child: Container(
+      height: 50,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(color: bg, borderRadius: AppRadius.rMd),
+      child: Text(label, style: AppText.label.copyWith(color: fg)),
     ),
   );
 }

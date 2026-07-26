@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
+import 'package:wager_app/app/global_widgets/animations.dart';
+import 'package:wager_app/app/global_widgets/app_components.dart';
+import 'package:wager_app/app/global_widgets/app_feedback.dart';
 import 'package:wager_app/app/profie/view_model/profile_viewmodel.dart';
 import 'package:wager_app/app/profie/views/settings_view.dart';
 import 'package:wager_app/styles/colors.dart';
+import 'package:wager_app/styles/dimensions.dart';
+import 'package:wager_app/styles/text_styles.dart';
 
 class ProfileView extends StatelessWidget {
   const ProfileView({super.key});
@@ -11,320 +16,340 @@ class ProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<ProfileViewModel>.reactive(
       viewModelBuilder: () => ProfileViewModel(),
-      onViewModelReady: (model) {
-        model.loadUserData();
-      },
+      onViewModelReady: (model) => model.loadUserData(),
       builder: (context, model, child) => Scaffold(
-        backgroundColor: backgroundColor,
-        body: Stack(
-          children: [
-            // Header with curved bottom
-            ClipPath(
-              clipper: _HeaderClipper(),
-              child: Container(
-                height: 220,
-                decoration: BoxDecoration(color: colorAccent),
-              ),
-            ),
-            // Main content
-            SingleChildScrollView(
-              child: Column(
-                children: [
-                  const SizedBox(height: 120),
-                  // Animated Avatar with Glow and Badge
-                  Center(
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        TweenAnimationBuilder<double>(
-                          tween: Tween(begin: 0.8, end: 1.1),
-                          duration: const Duration(seconds: 2),
-                          curve: Curves.easeInOut,
-                          builder: (context, scale, child) {
-                            return Transform.scale(
-                              scale: scale,
-                              child: Container(
-                                width: 120,
-                                height: 120,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: colorAccent,
-                                      blurRadius: 32,
-                                      spreadRadius: 8,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                          onEnd: () {},
-                        ),
-                        Material(
-                          elevation: 8,
-                          shape: const CircleBorder(),
-                          child: CircleAvatar(
-                            radius: 56,
-                            backgroundColor: Colors.white,
-                            child: Icon(Icons.person,
-                                size: 70, color: colorAccent),
-                          ),
-                        ),
-                        // Badge/accent (e.g., crown/star)
-                        Positioned(
-                          bottom: 12,
-                          right: 18,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.amber,
-                              shape: BoxShape.circle,
-                              border: Border.all(color: Colors.white, width: 2),
-                            ),
-                            padding: const EdgeInsets.all(6),
-                            child: const Icon(Icons.star,
-                                color: Colors.white, size: 18),
-                          ),
-                        ),
-                      ],
+        backgroundColor: AppColors.background,
+        extendBody: true,
+        body: SafeArea(
+          bottom: false,
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            padding: const EdgeInsets.fromLTRB(
+                AppSpacing.screen, AppSpacing.md, AppSpacing.screen, 120),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Top bar
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Profile', style: AppText.display),
+                    IconPillButton(
+                      icon: Icons.settings_outlined,
+                      onTap: () => _openSettings(context),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  // Glassmorphism Profile Card
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 600),
-                      curve: Curves.easeOutCubic,
-                      margin: const EdgeInsets.only(top: 8),
-                      decoration: BoxDecoration(
-                        color: containerColor,
-                        borderRadius: BorderRadius.circular(24),
-                        border: Border.all(
-                            color: Colors.white.withValues(alpha: 0.5),
-                            width: 1.5),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.blue.shade100.withValues(alpha: 0.2),
-                            blurRadius: 16,
-                            offset: const Offset(0, 8),
-                          ),
-                        ],
-                        // For a true glass effect, use BackdropFilter in a Stack (see comment below)
+                  ],
+                ),
+                const SizedBox(height: AppSpacing.xxl),
+
+                // Identity
+                FadeSlideIn(child: _identity(context, model)),
+                const SizedBox(height: AppSpacing.xxl),
+
+                // Stats hero (dark)
+                FadeSlideIn(
+                  delay: const Duration(milliseconds: 80),
+                  child: const _StatsHero(
+                      wagers: 16, won: 12, lost: 4, winRate: 75),
+                ),
+                const SizedBox(height: AppSpacing.lg),
+
+                // Level progress
+                FadeSlideIn(
+                  delay: const Duration(milliseconds: 140),
+                  child: const _LevelCard(
+                      level: 3, title: 'Sharpshooter', xp: 120, xpMax: 200),
+                ),
+                const SizedBox(height: AppSpacing.xxl),
+
+                // Account group
+                FadeSlideIn(
+                  delay: const Duration(milliseconds: 200),
+                  child: MenuGroup(
+                    label: 'ACCOUNT',
+                    tiles: [
+                      MenuTile(
+                        icon: Icons.edit_outlined,
+                        title: 'Edit profile',
+                        subtitle: 'Name, username, photo',
+                        chipIndex: 0,
+                        onTap: () {},
                       ),
-                      child: Stack(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 28, horizontal: 18),
-                            child: Column(
-                              children: [
-                                Text(
-                                  'Hello, ${model.userData?["username"] ?? 'loading...'}!',
-                                  style: TextStyle(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.bold,
-                                      color: colorText),
-                                ),
-                                const SizedBox(height: 6),
-                                Text(
-                                  model.userData?["email"] ?? 'loading...',
-                                  style:
-                                      TextStyle(fontSize: 15, color: colorText),
-                                ),
-                                const SizedBox(height: 18),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const _ProfileStat(
-                                      title: 'Events',
-                                      value: '12',
-                                    ),
-                                    Container(
-                                        width: 1,
-                                        height: 28,
-                                        color: Colors.grey[300]),
-                                    const _ProfileStat(
-                                        title: 'Friends', value: '34'),
-                                  ],
-                                ),
-                                const SizedBox(height: 18),
-                                SizedBox(
-                                  width: 150,
-                                  child: ElevatedButton.icon(
-                                    onPressed: () {},
-                                    icon: Icon(
-                                      Icons.edit,
-                                      size: 18,
-                                      color: colorText,
-                                    ),
-                                    label: Text(
-                                      'Edit Profile',
-                                      style: TextStyle(color: colorText),
-                                    ),
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: colorAccent,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(24),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                      MenuTile(
+                        icon: Icons.settings_outlined,
+                        title: 'Settings',
+                        subtitle: 'Notifications, privacy, theme',
+                        chipIndex: 1,
+                        onTap: () => _openSettings(context),
                       ),
-                    ),
+                      MenuTile(
+                        icon: Icons.shield_outlined,
+                        title: 'Password & security',
+                        chipIndex: 3,
+                        onTap: () {},
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 32),
-                  // Custom Action Buttons
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        _ProfileActionButton(
-                          icon: Icons.settings,
-                          label: 'Settings',
-                          color: Colors.blue.shade400,
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const SettingsView()),
-                            );
-                          },
-                        ),
-                        _ProfileActionButton(
-                          icon: Icons.lock,
-                          label: 'Password',
-                          color: Colors.orange.shade400,
-                          onTap: () {},
-                        ),
-                        _ProfileActionButton(
-                          icon: Icons.logout,
-                          label: 'Logout',
-                          color: Colors.red.shade400,
-                          onTap: () async {
-                            final shouldLogout = await showDialog<bool>(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                title: const Text('Logout'),
-                                content: const Text(
-                                    'Are you sure you want to logout?'),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () =>
-                                        Navigator.of(context).pop(false),
-                                    child: const Text('Cancel'),
-                                  ),
-                                  TextButton(
-                                    onPressed: () =>
-                                        Navigator.of(context).pop(true),
-                                    child: const Text('Logout'),
-                                  ),
-                                ],
-                              ),
-                            );
-                            if (!context.mounted) return;
-                            if (shouldLogout == true) {
-                              model.logout(context);
-                            }
-                          },
-                        ),
-                      ],
-                    ),
+                ),
+                const SizedBox(height: AppSpacing.lg),
+
+                // Support group
+                FadeSlideIn(
+                  delay: const Duration(milliseconds: 260),
+                  child: MenuGroup(
+                    label: 'SUPPORT',
+                    tiles: [
+                      MenuTile(
+                        icon: Icons.help_outline_rounded,
+                        title: 'Help center',
+                        chipIndex: 2,
+                        onTap: () {},
+                      ),
+                      MenuTile(
+                        icon: Icons.description_outlined,
+                        title: 'Terms & conditions',
+                        chipIndex: 4,
+                        onTap: () => model.openTermsAndConditions(context),
+                      ),
+                      MenuTile(
+                        icon: Icons.logout_rounded,
+                        title: 'Log out',
+                        chipIndex: 4,
+                        destructive: true,
+                        trailing: const SizedBox.shrink(),
+                        onTap: () => _confirmLogout(context, model),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 40),
-                ],
-              ),
+                ),
+                const SizedBox(height: AppSpacing.xxl),
+
+                Center(
+                  child: Text('Watt · v1.0.0',
+                      style: AppText.caption
+                          .copyWith(color: AppColors.textTertiary)),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
   }
-}
 
-// Creative header clipper for curved effect
-class _HeaderClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    final path = Path();
-    path.lineTo(0, size.height - 60);
-    path.quadraticBezierTo(
-        size.width / 2, size.height, size.width, size.height - 60);
-    path.lineTo(size.width, 0);
-    path.close();
-    return path;
+  // ---- Identity block ------------------------------------------------------
+  Widget _identity(BuildContext context, ProfileViewModel model) {
+    final username = (model.userData?["username"] as String?) ?? 'loading…';
+    final email = (model.userData?["email"] as String?) ?? 'loading…';
+    final initial = username.isNotEmpty && username != 'loading…'
+        ? username[0].toUpperCase()
+        : '?';
+
+    return Column(
+      children: [
+        Stack(
+          alignment: Alignment.bottomRight,
+          children: [
+            Breathing(
+              child: Container(
+                width: 96,
+                height: 96,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [AppColors.lavender, AppColors.sky],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.onSky.withValues(alpha: 0.25),
+                      blurRadius: 24,
+                      offset: const Offset(0, 10),
+                    ),
+                  ],
+                ),
+                child: Text(initial,
+                    style: AppText.display
+                        .copyWith(color: AppColors.onLavender, fontSize: 38)),
+              ),
+            ),
+            PressableScale(
+              onTap: model.updateProfilePicture,
+              child: Container(
+                padding: const EdgeInsets.all(7),
+                decoration: BoxDecoration(
+                  color: AppColors.ink,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: AppColors.background, width: 3),
+                ),
+                child: const Icon(Icons.camera_alt_rounded,
+                    color: Colors.white, size: 15),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: AppSpacing.lg),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(username, style: AppText.h1),
+            const SizedBox(width: 8),
+            const AppBadge.soft('Pro'),
+          ],
+        ),
+        const SizedBox(height: 4),
+        Text(email, style: AppText.bodyMuted),
+      ],
+    );
   }
 
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
+  void _openSettings(BuildContext context) => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const SettingsView()),
+      );
+
+  Future<void> _confirmLogout(
+      BuildContext context, ProfileViewModel model) async {
+    final shouldLogout = await showAppConfirmDialog(
+      context,
+      icon: Icons.logout_rounded,
+      title: 'Log out?',
+      message: 'You’ll need to sign in again to place wagers.',
+      confirmLabel: 'Log out',
+      destructive: true,
+    );
+    if (!context.mounted) return;
+    if (shouldLogout == true) model.logout(context);
+  }
 }
 
-// Profile stat widget (unchanged)
-class _ProfileStat extends StatelessWidget {
-  final String title;
-  final String value;
-  const _ProfileStat({required this.title, required this.value});
+/// Dark hero summarising the player's record, with counting numbers.
+class _StatsHero extends StatelessWidget {
+  final int wagers;
+  final int won;
+  final int lost;
+  final int winRate;
+
+  const _StatsHero({
+    required this.wagers,
+    required this.won,
+    required this.lost,
+    required this.winRate,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+    return Container(
+      padding: const EdgeInsets.all(AppSpacing.xl),
+      decoration: BoxDecoration(
+        color: AppColors.ink,
+        borderRadius: BorderRadius.circular(AppRadius.xl),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.ink.withValues(alpha: 0.22),
+            blurRadius: 28,
+            offset: const Offset(0, 14),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          _cell('Wagers', wagers, Colors.white),
+          _divider(),
+          _cell('Won', won, AppColors.success),
+          _divider(),
+          _cell('Lost', lost, const Color(0xFFF87171)),
+          _divider(),
+          _cell('Win rate', winRate, AppColors.goldOnDark, suffix: '%'),
+        ],
+      ),
+    );
+  }
+
+  Widget _divider() => Container(
+      width: 1, height: 34, color: Colors.white.withValues(alpha: 0.1));
+
+  Widget _cell(String label, int value, Color color, {String suffix = ''}) {
+    return Expanded(
       child: Column(
         children: [
-          Text(
-            value,
-            style: TextStyle(
-                fontSize: 18, fontWeight: FontWeight.bold, color: colorAccent),
+          AnimatedCount(
+            value: value,
+            style: AppText.h2.copyWith(color: color, fontSize: 20),
+            builder: (v) => '${v.round()}$suffix',
           ),
-          const SizedBox(height: 2),
-          Text(
-            title,
-            style: TextStyle(fontSize: 14, color: colorText),
-          ),
+          const SizedBox(height: 4),
+          Text(label,
+              style: AppText.caption
+                  .copyWith(color: Colors.white.withValues(alpha: 0.55))),
         ],
       ),
     );
   }
 }
 
-// Custom action button for profile actions
-class _ProfileActionButton extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final Color color;
-  final VoidCallback onTap;
-  const _ProfileActionButton(
-      {required this.icon,
-      required this.label,
-      required this.color,
-      required this.onTap});
+/// Level + XP progress card with an animated bar.
+class _LevelCard extends StatelessWidget {
+  final int level;
+  final String title;
+  final int xp;
+  final int xpMax;
+
+  const _LevelCard({
+    required this.level,
+    required this.title,
+    required this.xp,
+    required this.xpMax,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(18),
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: color.withAlpha(40),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(icon, color: color, size: 28),
+    final progress = (xp / xpMax).clamp(0.0, 1.0);
+    return AppCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              PastelIconBadge(
+                icon: Icons.military_tech_outlined,
+                background: AppColors.amber,
+                foreground: AppColors.onAmber,
+                size: 40,
+              ),
+              const SizedBox(width: AppSpacing.md),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Level $level · $title', style: AppText.label),
+                    Text('$xp / $xpMax XP to level ${level + 1}',
+                        style: AppText.caption),
+                  ],
+                ),
+              ),
+            ],
           ),
-        ),
-        const SizedBox(height: 8),
-        Text(label,
-            style: TextStyle(
-                fontSize: 13, color: color, fontWeight: FontWeight.w600)),
-      ],
+          const SizedBox(height: AppSpacing.lg),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(AppRadius.pill),
+            child: TweenAnimationBuilder<double>(
+              tween: Tween(begin: 0, end: progress),
+              duration: const Duration(milliseconds: 1100),
+              curve: Curves.easeOutCubic,
+              builder: (context, value, _) => LinearProgressIndicator(
+                value: value,
+                minHeight: 10,
+                backgroundColor: AppColors.surfaceMuted,
+                valueColor:
+                    const AlwaysStoppedAnimation<Color>(AppColors.accent),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

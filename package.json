@@ -1,0 +1,13 @@
+{
+  "name": "watt-convex",
+  "version": "1.0.0",
+  "description": "Convex backend for the Watt app",
+  "private": true,
+  "scripts": {
+    "dev": "convex dev",
+    "deploy": "convex deploy"
+  },
+  "dependencies": {
+    "convex": "^1.17.0"
+  }
+}

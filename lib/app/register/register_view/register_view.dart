@@ -4,6 +4,8 @@ import 'package:wager_app/app/global_widgets/my_button.dart';
 import 'package:wager_app/app/global_widgets/my_textfield.dart';
 import 'package:wager_app/app/register/register_view_model/register_view_model.dart';
 import 'package:wager_app/styles/colors.dart';
+import 'package:wager_app/styles/dimensions.dart';
+import 'package:wager_app/styles/text_styles.dart';
 
 class RegisterView extends StatefulWidget {
   final void Function()? onTap;
@@ -20,154 +22,94 @@ class _RegisterViewState extends State<RegisterView> {
     return ViewModelBuilder<RegisterViewModel>.reactive(
       viewModelBuilder: () => RegisterViewModel(),
       builder: (context, model, child) => Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: Stack(
-          children: [
-            // Background image
-            Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/wager_background.jpg'),
-                  fit: BoxFit.cover,
+        backgroundColor: AppColors.background,
+        appBar: AppBar(
+          leading: widget.onTap != null
+              ? IconButton(
+                  onPressed: widget.onTap,
+                  icon: const Icon(Icons.arrow_back_rounded),
+                )
+              : null,
+        ),
+        body: SafeArea(
+          top: false,
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(AppSpacing.xxl, AppSpacing.sm,
+                AppSpacing.xxl, AppSpacing.xxl),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text('Create account', style: AppText.display),
+                const SizedBox(height: 6),
+                Text('A few details and you’re ready to wager.',
+                    style: AppText.bodyMuted),
+                const SizedBox(height: AppSpacing.xxl),
+
+                MyTextField(
+                  label: 'Username',
+                  hintText: 'Choose a username',
+                  obscureText: false,
+                  icon: Icons.alternate_email_rounded,
+                  controller: model.userNameController,
                 ),
-              ),
-            ),
-
-            // Dark overlay
-            Container(
-              color: Colors.black,
-            ),
-
-            // Content
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 28.0),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      // Logo
-                      Image.asset(
-                        'assets/user.png',
-                        height: 120,
-                        color: Colors.white,
-                      ),
-
-                      const SizedBox(height: 20),
-
-                      // Title
-                      const Text(
-                        'Create Account',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 30,
-                          letterSpacing: 1,
-                        ),
-                      ),
-
-                      const SizedBox(height: 6),
-
-                      // Subtitle
-                      const Text(
-                        'Fill in your details to get started.',
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 15,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-
-                      const SizedBox(height: 35),
-
-                      // Username
-                      MyTextField(
-                        hintText: 'Username',
-                        obscureText: false,
-                        controller: model.userNameController,
-                      ),
-                      const SizedBox(height: 14),
-
-                      // Email
-                      MyTextField(
-                        hintText: 'Email',
-                        obscureText: false,
-                        controller: model.emailController,
-                      ),
-                      const SizedBox(height: 14),
-
-                      // First Name
-                      MyTextField(
-                        hintText: 'First Name',
-                        obscureText: false,
-                        controller: model.firstNameController,
-                      ),
-                      const SizedBox(height: 14),
-
-                      // Password
-                      MyTextField(
-                        hintText: 'Password',
-                        obscureText: true,
-                        controller: model.passwordController,
-                      ),
-                      const SizedBox(height: 14),
-
-                      // Confirm Password
-                      MyTextField(
-                        hintText: 'Confirm Password',
-                        obscureText: true,
-                        controller: model.confirmPasswordController,
-                      ),
-
-                      const SizedBox(height: 28),
-
-                      // Register Button
-                      SizedBox(
-                        width: double.infinity,
-                        child: MyButton(
-                          isGlass: false,
-                          isGradient: true,
-                          text: 'Register',
-                          onPressed: () {
-                            model.registerUser(context);
-                          },
-                        ),
-                      ),
-
-                      const SizedBox(height: 25),
-
-                      // Login link
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            "Already have an account?",
-                            style: TextStyle(
-                              color: Colors.white70,
-                              fontSize: 15,
-                            ),
-                          ),
-                          const SizedBox(width: 6),
-                          GestureDetector(
-                            onTap: widget.onTap,
-                            child: Text(
-                              "Login Here",
-                              style: TextStyle(
-                                color: colorAccent,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-
-                      const SizedBox(height: 10),
-                    ],
-                  ),
+                const SizedBox(height: AppSpacing.lg),
+                MyTextField(
+                  label: 'First name',
+                  hintText: 'Your first name',
+                  obscureText: false,
+                  icon: Icons.person_outline_rounded,
+                  controller: model.firstNameController,
                 ),
-              ),
+                const SizedBox(height: AppSpacing.lg),
+                MyTextField(
+                  label: 'Email',
+                  hintText: 'you@example.com',
+                  obscureText: false,
+                  icon: Icons.mail_outline_rounded,
+                  keyboardType: TextInputType.emailAddress,
+                  controller: model.emailController,
+                ),
+                const SizedBox(height: AppSpacing.lg),
+                MyTextField(
+                  label: 'Password',
+                  hintText: 'Create a password',
+                  obscureText: true,
+                  icon: Icons.lock_outline_rounded,
+                  controller: model.passwordController,
+                ),
+                const SizedBox(height: AppSpacing.lg),
+                MyTextField(
+                  label: 'Confirm password',
+                  hintText: 'Re-enter your password',
+                  obscureText: true,
+                  icon: Icons.lock_outline_rounded,
+                  controller: model.confirmPasswordController,
+                ),
+                const SizedBox(height: AppSpacing.xxl),
+
+                MyButton(
+                  text: 'Create account',
+                  isLoading: model.isBusy,
+                  onPressed: () => model.registerUser(context),
+                ),
+                const SizedBox(height: AppSpacing.xl),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('Already have an account?', style: AppText.bodyMuted),
+                    const SizedBox(width: 6),
+                    GestureDetector(
+                      onTap: widget.onTap,
+                      child: Text('Sign in',
+                          style:
+                              AppText.label.copyWith(color: AppColors.accentText)),
+                    ),
+                  ],
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

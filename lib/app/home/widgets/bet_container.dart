@@ -1,7 +1,11 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:wager_app/app/global_widgets/app_components.dart';
 import 'package:wager_app/styles/colors.dart';
+import 'package:wager_app/styles/dimensions.dart';
+import 'package:wager_app/styles/text_styles.dart';
 
+/// A single wager, rendered as a clean light card with a pastel icon,
+/// a soft status pill, a "you vs opponent" row and a muted stake/date footer.
 class NewBetCard extends StatelessWidget {
   final String title;
   final String description;
@@ -10,6 +14,7 @@ class NewBetCard extends StatelessWidget {
   final String stake;
   final String status;
   final String date;
+  final VoidCallback? onTap;
 
   const NewBetCard({
     super.key,
@@ -20,312 +25,125 @@ class NewBetCard extends StatelessWidget {
     required this.stake,
     required this.status,
     required this.date,
+    this.onTap,
   });
 
-  Color getStatusColor() {
+  /// [background, foreground] soft pair for the status pill.
+  List<Color> _statusColors() {
     switch (status.toLowerCase()) {
-      case "pending":
-        return const Color(0xFFFFA726); // Orange
-      case "accepted":
-        return const Color(0xFF42A5F5); // Blue
       case "won":
-        return const Color(0xFF66BB6A); // Green
+        return [AppColors.successSoft, AppColors.success];
       case "lost":
-        return const Color(0xFFEF5350); // Red
+        return [AppColors.errorSoft, AppColors.error];
+      case "pending":
+        return [AppColors.warningSoft, AppColors.warning];
+      case "accepted":
       case "active":
-        return const Color(0xFF6A11CB); // Purple accent
+        return [AppColors.accentSoft, AppColors.accent];
       default:
-        return const Color(0xFF9E9E9E); // Grey
+        return [AppColors.surfaceMuted, AppColors.textSecondary];
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 335,
-      margin: const EdgeInsets.only(bottom: 16),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        gradient: const LinearGradient(
-          colors: [Color(0xFF1A1A1A), Color(0xFF141414)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.4),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
-          ),
-        ],
-      ),
-      child: Stack(
+    final statusColors = _statusColors();
+    final chip = AppColors.chipForIndex(title.length);
+
+    return AppCard(
+      onTap: onTap,
+      padding: const EdgeInsets.all(AppSpacing.lg),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Gradient border effect
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              gradient: LinearGradient(
-                colors: status.toLowerCase() == "active"
-                    ? [const Color(0xFF6A11CB), const Color(0x994277F2)]
-                    : [const Color(0xFF2A2A2A), const Color(0xFF2A2A2A)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+          // Header: icon + title + status pill
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              PastelIconBadge(
+                icon: Icons.emoji_events_outlined,
+                background: chip[0],
+                foreground: chip[1],
               ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(1.5), // Border width
-              child: Container(
-                decoration: BoxDecoration(
-                  color: const Color(0xFF1E1E1E),
-                  borderRadius: BorderRadius.circular(18.5),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                      20, 50, 20, 10), // Added top padding for status badge
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Title with icon
-                      Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF6A11CB).withOpacity(0.2),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Icon(
-                              Icons.currency_exchange,
-                              color: const Color(0xFF6A11CB),
-                              size: 18,
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  right:
-                                      60), // Add right padding to prevent text from going under status badge
-                              child: Text(
-                                title,
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  letterSpacing: 0.5,
-                                ),
-                                maxLines:
-                                    2, // Allow title to take 2 lines if needed
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      const SizedBox(height: 12),
-
-                      // Description
-                      Text(
-                        description,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.white.withOpacity(0.7),
-                          height: 1.4,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-
-                      const SizedBox(height: 20),
-
-                      // VS Divider
-                      Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          const Divider(
-                            color: Color(0xFF2A2A2A),
-                            thickness: 1,
-                          ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 6),
-                            decoration: BoxDecoration(
-                              gradient: const LinearGradient(
-                                colors: [Color(0xFF6A11CB), Color(0x994277F2)],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: const Text(
-                              'VS',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      const SizedBox(height: 16),
-
-                      // Players section
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          // Player 1
-                          _buildPlayerCard(
-                            name: player1,
-                            isPlayer1: true,
-                            isWinning: status.toLowerCase() == "won",
-                          ),
-
-                          // Player 2
-                          _buildPlayerCard(
-                            name: player2,
-                            isPlayer1: false,
-                            isWinning: status.toLowerCase() == "lost",
-                          ),
-                        ],
-                      ),
-
-                      const SizedBox(height: 20),
-
-                      // Footer with stake and date
-                      Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF141414),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: const Color(0xFF2A2A2A),
-                            width: 1,
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            // Stake
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'STAKE',
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    color: Colors.white.withOpacity(0.5),
-                                    fontWeight: FontWeight.w500,
-                                    letterSpacing: 1,
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.account_balance_wallet,
-                                      color: const Color(0xFF6A11CB),
-                                      size: 16,
-                                    ),
-                                    const SizedBox(width: 6),
-                                    Text(
-                                      stake,
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-
-                            // Date
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text(
-                                  'DATE',
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    color: Colors.white.withOpacity(0.5),
-                                    fontWeight: FontWeight.w500,
-                                    letterSpacing: 1,
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.calendar_today,
-                                      color: Colors.white.withOpacity(0.7),
-                                      size: 14,
-                                    ),
-                                    const SizedBox(width: 6),
-                                    Text(
-                                      date,
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.white.withOpacity(0.9),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+              const SizedBox(width: AppSpacing.md),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title.replaceFirst(RegExp(r'^#\s*'), ''),
+                      style: AppText.h3,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      description,
+                      style: AppText.caption,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
                 ),
               ),
-            ),
+              const SizedBox(width: AppSpacing.sm),
+              AppBadge(
+                label: status,
+                background: statusColors[0],
+                foreground: statusColors[1],
+              ),
+            ],
           ),
 
-          // Status badge with glow effect
-          Positioned(
-            top: 12,
-            right: 12,
-            child: Container(
-              constraints: const BoxConstraints(
-                minWidth: 80, // Ensure minimum width for status text
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    getStatusColor(),
-                    getStatusColor().withOpacity(0.8),
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: getStatusColor().withOpacity(0.4),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
+          const SizedBox(height: AppSpacing.lg),
+
+          // Players row
+          Row(
+            children: [
+              Expanded(child: _player(player1, "You", AppColors.onSky)),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 10, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: AppColors.ink,
+                    borderRadius: BorderRadius.circular(AppRadius.pill),
                   ),
-                ],
-              ),
-              child: Text(
-                status.toUpperCase(),
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 11,
-                  letterSpacing: 0.5,
+                  child: Text(
+                    "VS",
+                    style: AppText.overline
+                        .copyWith(color: AppColors.onInk, letterSpacing: 0.5),
+                  ),
                 ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
               ),
+              Expanded(
+                child: _player(player2, "Opponent", AppColors.onRose,
+                    alignEnd: true),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: AppSpacing.lg),
+
+          // Footer well: stake + date
+          Container(
+            padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.lg, vertical: AppSpacing.md),
+            decoration: BoxDecoration(
+              color: AppColors.surfaceMuted,
+              borderRadius: AppRadius.rMd,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _footerItem(Icons.account_balance_wallet_outlined, "STAKE",
+                    stake, AppColors.textPrimary),
+                Container(width: 1, height: 28, color: AppColors.border),
+                _footerItem(Icons.calendar_today_outlined, "DATE", date,
+                    AppColors.textSecondary,
+                    alignEnd: true),
+              ],
             ),
           ),
         ],
@@ -333,108 +151,68 @@ class NewBetCard extends StatelessWidget {
     );
   }
 
-  Widget _buildPlayerCard({
-    required String name,
-    required bool isPlayer1,
-    required bool isWinning,
-  }) {
-    return Container(
-      width: 120,
-      padding: const EdgeInsets.all(12),
+  Widget _player(String name, String role, Color accent,
+      {bool alignEnd = false}) {
+    final avatar = Container(
+      width: 40,
+      height: 40,
+      alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: isWinning
-            ? (isPlayer1
-                ? const Color(0xFF66BB6A).withOpacity(0.15)
-                : const Color(0xFFEF5350).withOpacity(0.15))
-            : const Color(0xFF2A2A2A),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(
-          color: isWinning
-              ? (isPlayer1
-                  ? const Color(0xFF66BB6A).withOpacity(0.3)
-                  : const Color(0xFFEF5350).withOpacity(0.3))
-              : const Color(0xFF3A3A3A),
-          width: 1,
-        ),
+        color: accent.withValues(alpha: 0.12),
+        shape: BoxShape.circle,
       ),
-      child: Column(
-        children: [
-          // Player avatar with status indicator
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              Container(
-                width: 50,
-                height: 50,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: LinearGradient(
-                    colors: isPlayer1
-                        ? [const Color(0xFF6A11CB), const Color(0x994277F2)]
-                        : [const Color(0xFFEF5350), const Color(0x99FF7043)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(2),
-                  child: CircleAvatar(
-                    backgroundColor: const Color(0xFF1A1A1A),
-                    child: Text(
-                      name[0].toUpperCase(),
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              if (isWinning)
-                Positioned(
-                  top: 0,
-                  right: 0,
-                  child: Container(
-                    padding: const EdgeInsets.all(3),
-                    decoration: const BoxDecoration(
-                      color: Color(0xFF66BB6A),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.star,
-                      size: 10,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Text(
-            name,
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w600,
-              color: isWinning
-                  ? (isPlayer1
-                      ? const Color(0xFF66BB6A)
-                      : const Color(0xFFEF5350))
-                  : Colors.white,
-            ),
+      child: Text(
+        name.isNotEmpty ? name[0].toUpperCase() : "?",
+        style: AppText.label.copyWith(color: accent),
+      ),
+    );
+
+    final texts = Column(
+      crossAxisAlignment:
+          alignEnd ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+      children: [
+        Text(name,
+            style: AppText.label,
             maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            isPlayer1 ? 'You' : 'Opponent',
-            style: TextStyle(
-              fontSize: 11,
-              color: Colors.white.withOpacity(0.5),
-            ),
-          ),
-        ],
-      ),
+            overflow: TextOverflow.ellipsis),
+        Text(role, style: AppText.caption),
+      ],
+    );
+
+    final children = alignEnd
+        ? [Flexible(child: texts), const SizedBox(width: 10), avatar]
+        : [avatar, const SizedBox(width: 10), Flexible(child: texts)];
+
+    return Row(
+      mainAxisAlignment:
+          alignEnd ? MainAxisAlignment.end : MainAxisAlignment.start,
+      children: children,
+    );
+  }
+
+  Widget _footerItem(
+      IconData icon, String label, String value, Color valueColor,
+      {bool alignEnd = false}) {
+    return Column(
+      crossAxisAlignment:
+          alignEnd ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+      children: [
+        Text(label, style: AppText.overline),
+        const SizedBox(height: 4),
+        Row(
+          children: [
+            if (!alignEnd) ...[
+              Icon(icon, size: 15, color: valueColor),
+              const SizedBox(width: 6),
+            ],
+            Text(value, style: AppText.moneySmall.copyWith(color: valueColor)),
+            if (alignEnd) ...[
+              const SizedBox(width: 6),
+              Icon(icon, size: 15, color: valueColor),
+            ],
+          ],
+        ),
+      ],
     );
   }
 }

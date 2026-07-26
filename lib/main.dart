@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:wager_app/app/constants/strings.dart';
 import 'package:wager_app/firebase_options.dart';
 import 'package:wager_app/locator.dart';
+import 'package:wager_app/services/convex_service.dart';
 import 'package:wager_app/services/route_service.dart';
 import 'package:wager_app/styles/theme.dart';
 
@@ -15,6 +16,11 @@ void main() async {
   FirebaseFirestore.instance.settings = const Settings(
     persistenceEnabled: true,
   );
+
+  // Initialise Convex (no-op until CONVEX_URL is configured). Once configured,
+  // call ConvexService.instance.bindFirebaseAuth() after sign-in.
+  await ConvexService.instance.init();
+
   runApp(const MyApp());
 }
 
